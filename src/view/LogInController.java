@@ -7,18 +7,27 @@ package view;
 
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import logic.SignableFactory;
+import message.Message;
+import message.Message.Type;
+import user.User;
 
 
 
@@ -42,13 +51,26 @@ public class LogInController {
     private Label lblErrorLogin;
     @FXML
     private Label lblErrorPassword;
+    
+    
     @FXML
     public void handleButtonSignUp(ActionEvent event) {
         try{
             start_signup(stage);
         } catch(IOException e){
-            
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            alert.showAndWait();
         } 
+    }
+    
+    @FXML
+    public void handleButtonAccept(ActionEvent event) {
+        User user = new User();
+        user.setLogin(txtUsername.getText());
+        user.setPassword(pwdPassword.getText());
+        user.setLastAccess(Date.valueOf(LocalDate.now()));
+        SignableFactory.getSignable().signIn(user);
+        
     }
     
     boolean errorUsername=true;

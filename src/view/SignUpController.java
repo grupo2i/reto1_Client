@@ -6,6 +6,8 @@
 package view;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,13 +17,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import logic.SignableFactory;
+import user.User;
 
 /**
  * Class that controls the SignUpWindow behaviour.
@@ -63,15 +69,7 @@ public class SignUpController {
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
     
     
-    @FXML
-    public void handleButtonLogIn(ActionEvent event) {
-        try{
-            start_logIn(stage);
-        } catch (IOException e){
-            
-        }
-        
-    }
+    
     
     /**
      * Initializes the scene and its components
@@ -124,6 +122,29 @@ public class SignUpController {
         lblErrorName.setVisible(false);
         lblErrorPassword.setVisible(false);
         lblErrorUsername.setVisible(false);
+    }
+    
+    @FXML
+    public void handleButtonLogIn(ActionEvent event) {
+        try{
+            start_logIn(stage);
+        } catch (IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
+            alert.showAndWait();
+        }
+        
+    }
+    
+    @FXML
+    public void handleButtonAccept(ActionEvent event) {
+        User user = new User();
+        user.setLogin(txtUsername.getText());
+        user.setEmail(txtEmail.getText());
+        user.setFullName(txtName.getText());
+        user.setPassword(pwdPassword.getText());
+        user.setLastAccess(Date.valueOf(LocalDate.now()));
+        SignableFactory.getSignable().signIn(user);
+        
     }
     
     /**
@@ -286,13 +307,13 @@ public class SignUpController {
         stage = primaryStage;
     }
 
-    private void start_logIn(Stage primaryStage) throws IOException {
+    private void start_logIn(Stage primaryStage) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
         Parent root =(Parent)loader.load();
         
         LogInController controller = (loader.getController());
         controller.setStage(primaryStage);
-        controller.initStage(root); 
+        controller.initStage(root);
     }
     
 }
