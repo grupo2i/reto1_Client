@@ -5,17 +5,21 @@
  */
 package view;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -59,6 +63,16 @@ public class SignUpController {
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
     
     
+    @FXML
+    public void handleButtonLogIn(ActionEvent event) {
+        try{
+            start_logIn(stage);
+        } catch (IOException e){
+            
+        }
+        
+    }
+    
     /**
      * Initializes the scene and its components
      * @param root 
@@ -82,6 +96,18 @@ public class SignUpController {
         textFieldErrors.put("pwdConfirmPasswordError", true);
         
         stage.show();
+    }
+    
+    public void initialize(){
+        btnAccept.setDisable(true);
+        lblErrorConfirmPassword.setVisible(false);
+        lblErrorEmail.setVisible(false);
+        lblErrorName.setVisible(false);
+        lblErrorUsername.setVisible(false);
+        lblErrorPassword.setVisible(false);
+        btnAccept.setTooltip(
+                new Tooltip("Pulse para validar credenciales"));
+        
     }
     
     /**
@@ -258,6 +284,15 @@ public class SignUpController {
     
     public void setStage(Stage primaryStage) {
         stage = primaryStage;
+    }
+
+    private void start_logIn(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+        Parent root =(Parent)loader.load();
+        
+        LogInController controller = (loader.getController());
+        controller.setStage(primaryStage);
+        controller.initStage(root); 
     }
     
 }

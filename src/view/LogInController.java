@@ -43,9 +43,16 @@ public class LogInController {
     @FXML
     private Label lblErrorPassword;
     @FXML
-    public void handleButtonSignUp(ActionEvent event) throws IOException {
-        start_signup(stage);
+    public void handleButtonSignUp(ActionEvent event) {
+        try{
+            start_signup(stage);
+        } catch(IOException e){
+            
+        } 
     }
+    
+    boolean errorUsername=true;
+    boolean errorPassword=true;
       
     public Stage getStage() {
         return stage;
@@ -79,43 +86,46 @@ public class LogInController {
 
     private void textChangedPassword(Observable obs){
         Integer pwdLenght = pwdPassword.getText().trim().length();
-        boolean error=false;
         
         if(pwdLenght<6 || pwdLenght>255){
-            btnAccept.setDisable(true);
-            error=true;
+            errorPassword=true;
             lblErrorPassword.setVisible(true);
-        }
-        if(error)
-            btnAccept.setDisable(true);
-        if(!error){
-            btnAccept.setDisable(false);   
+        } else {
+            errorPassword=false;
             lblErrorPassword.setVisible(false);
         }
         if (pwdLenght<6)
-            lblErrorPassword.setText("Introduce al menos 6 caracteres");
+            lblErrorPassword.setText("* Must be at least 6 characters");
         if(pwdLenght>255)
-            lblErrorPassword.setText("Introduce menos de 255 caracteres");
+            lblErrorPassword.setText("* Must be less than 255 characters");
+        
+        testInputErrors();
     }
      private void textChangedUser(Observable obs){
         Integer usLenght = txtUsername.getText().trim().length();
 
-        boolean error=false;
         if(usLenght==0 || usLenght>255){
-            error=true;
+            errorUsername=true;
             lblErrorLogin.setVisible(true);
-        }
-        if(error)
-            btnAccept.setDisable(true);
-        if(!error){
-            btnAccept.setDisable(false);   
+        } else {
+            errorUsername=false;
             lblErrorLogin.setVisible(false);
         }
         if (usLenght==0)
-            lblErrorLogin.setText("Introduce algun caracter");
+            lblErrorLogin.setText("* Field must not be empty");
         if(usLenght>255)
-            lblErrorLogin.setText("Introduce menos de 255 caracteres");
+            lblErrorLogin.setText("* Must be less than 255 characters");
+        
+        testInputErrors();
     }
+     
+     private void testInputErrors(){
+         if(errorPassword || errorUsername){
+             btnAccept.setDisable(true);
+         } else {
+             btnAccept.setDisable(false);
+         }
+     }
     
     public void start_signup(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
