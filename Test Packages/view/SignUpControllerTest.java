@@ -24,20 +24,31 @@ import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
- *
+ * Test class for the SignUpController.
  * @author Martin Angulo <martin.angulo at tartanga.eus>
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignUpControllerTest extends ApplicationTest {
+    /** Maximum length of the text field inputs. */
     private static final int MAX_TEXT_LENGTH = 255;
+    /** String of size MAX_TEXT_LENGTH + 1 for testing. */
     private static String longString = "";
     
+    /**
+     * Initializes testing variables.
+     * @throws java.lang.Exception
+     */
     @BeforeClass
     public static void initialize() throws Exception {
         for(int i = 0; i <= MAX_TEXT_LENGTH; ++i)
             longString += "A";
     }
     
+    /**
+     * Starts the SignUp window.
+     * @param stage Primary stage.
+     * @throws java.lang.Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
@@ -47,6 +58,9 @@ public class SignUpControllerTest extends ApplicationTest {
         controller.initStage(root); 
     }
     
+    /**
+     * Tests the initial stage of the window.
+     */
     @Test
     public void testA_initialState(){
         //Texts
@@ -78,6 +92,9 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#btnAccept", isVisible());
     }
     
+    /**
+     * Tests the window when all data is set correctly.
+     */
     @Test
     public void testB_fillAllData(){
         clickOn("#txtUsername");
@@ -97,6 +114,9 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#btnAccept", isEnabled());
     }
     
+    /**
+     * Tests that the accept button is disabled when all text fields are empty.
+     */
     @Test
     public void testC_emptyTexts() {
         clickOn("#txtUsername");
@@ -113,6 +133,10 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#btnAccept", isDisabled());
     }
     
+    /**
+     * Tests that the error labels are visible when the input texts are longer
+     * than MAX_TEXT_LENGTH and that the accept button is disabled.
+     */
     @Test
     //@Ignore
     public void testD_maxLengthText() {
