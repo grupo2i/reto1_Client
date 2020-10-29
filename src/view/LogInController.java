@@ -42,6 +42,8 @@ public class LogInController {
     @FXML
     private Button btnAccept;
     @FXML
+    private Button btnSignUp;
+    @FXML
     private Label lblUsername;
     @FXML
     private TextField txtUsername;
@@ -50,19 +52,26 @@ public class LogInController {
     @FXML
     private Label lblErrorLogin;
     @FXML
-    private Label lblErrorPassword;
-    
-    
+    private Label lblErrorPassword;     
+    /**
+     * Switches to the SignUp window.
+     *
+     * @param event
+     */
     @FXML
     public void handleButtonSignUp(ActionEvent event) {
         try{
-            start_signup(stage);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
+        Parent root = (Parent) loader.load();
+
+        SignUpController controller = (loader.getController());
+        controller.setStage(stage);
+        controller.initStage(root);
         } catch(IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
         } 
-    }
-    
+    }   
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         User user = new User();
@@ -79,11 +88,14 @@ public class LogInController {
     public Stage getStage() {
         return stage;
     }
-    
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    /**
+     * Initializes the scene and its components
+     *
+     * @param root
+     */
     public void initStage(Parent root){
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -91,24 +103,22 @@ public class LogInController {
         stage.setResizable(false);
         txtUsername.textProperty().addListener(this::textChangedUser);
         pwdPassword.textProperty().addListener(this::textChangedPassword);
-        stage.show();
-    }
-    public void initialize(){
         btnAccept.setDisable(true);
         lblErrorLogin.setVisible(false);
         lblErrorPassword.setVisible(false);
         btnAccept.setTooltip(
-                new Tooltip("Pulse para validar credenciales"));
-        
+                new Tooltip("Click to send credentials "));
+        btnSignUp.setTooltip(
+                new Tooltip("Click to navigate to Sign Up"));
+        stage.show();
     }
-    public void OnClick(){
-        String us = txtUsername.getText();
-        String pw = pwdPassword.getText();
-    }
-
+    /**
+     * Tests if there is any error on every pwdPassword text propertie change.
+     * @param obs
+     */
     private void textChangedPassword(Observable obs){
         Integer pwdLenght = pwdPassword.getText().trim().length();
-        
+        //if pwd =0 or <255= error
         if(pwdLenght<6 || pwdLenght>255){
             errorPassword=true;
             lblErrorPassword.setVisible(true);
@@ -116,16 +126,22 @@ public class LogInController {
             errorPassword=false;
             lblErrorPassword.setVisible(false);
         }
+        //if typing and then erasing, reminder that field must be greater than 6
         if (pwdLenght<6)
             lblErrorPassword.setText("* Must be at least 6 characters");
+        //if typing and then erasing and exceeding max characters, reminding not to do it 
         if(pwdLenght>255)
             lblErrorPassword.setText("* Must be less than 255 characters");
         
         testInputErrors();
     }
-     private void textChangedUser(Observable obs){
+    /**
+     * Tests if there is any error on every txtUsername text propertie change.
+     * @param obs
+     */
+    private void textChangedUser(Observable obs){
         Integer usLenght = txtUsername.getText().trim().length();
-
+        //if username =0 or <255= error
         if(usLenght==0 || usLenght>255){
             errorUsername=true;
             lblErrorLogin.setVisible(true);
@@ -133,29 +149,23 @@ public class LogInController {
             errorUsername=false;
             lblErrorLogin.setVisible(false);
         }
+        //if typing and then erasing, reminder that field must not be empty
         if (usLenght==0)
             lblErrorLogin.setText("* Field must not be empty");
+        //if typing and then erasing and exceeding max characters, reminding not to do it      
         if(usLenght>255)
             lblErrorLogin.setText("* Must be less than 255 characters");
         
         testInputErrors();
-    }
-     
-     private void testInputErrors(){
+    }  
+    /**
+     * Checks if there is any input error and disables btnAccept if so.
+     */
+    private void testInputErrors(){
          if(errorPassword || errorUsername){
              btnAccept.setDisable(true);
          } else {
              btnAccept.setDisable(false);
          }
-     }
-    
-    public void start_signup(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
-        Parent root = (Parent) loader.load();
-
-        SignUpController controller = (loader.getController());
-        controller.setStage(primaryStage);
-        controller.initStage(root);
-    }
-
+     }    
 }
