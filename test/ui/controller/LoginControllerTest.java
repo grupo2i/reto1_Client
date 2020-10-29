@@ -6,7 +6,6 @@
 package ui.controller;
 
 import application.ClientApplication;
-import java.util.concurrent.TimeoutException;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.testfx.framework.junit.ApplicationTest;
