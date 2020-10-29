@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" 
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogOutController">
+   <top>
+      <Pane prefHeight="49.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnLogOut" layoutX="524.0" layoutY="12.0" mnemonicParsing="false" 
+                    text="Log out" onAction="#handleButtonLogOut" />
+         </children>
+      </Pane>
+   </top>
+   <padding>
+      <Insets left="5.0" />
+   </padding>
+   <bottom>
+      <Pane prefHeight="66.0" prefWidth="547.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnExit" alignment="CENTER" contentDisplay="CENTER" 
+                    layoutX="529.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" 
+                    prefWidth="57.0" text="Exit" textAlignment="CENTER" onAction="#handleButtonExit" />
+         </children>
+      </Pane>
+   </bottom>
+</BorderPane>
