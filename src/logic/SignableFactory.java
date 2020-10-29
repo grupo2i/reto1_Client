@@ -13,6 +13,10 @@ package logic;
 public class SignableFactory {
     private static Signer signer;
     
+    /**
+     * Return an static Signable for client/server communication.
+     * @return The Signable to use.
+     */
     public static Signable getSignable(){
         if(signer == null)
             signer = new Signer();
