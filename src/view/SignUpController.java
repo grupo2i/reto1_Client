@@ -153,7 +153,6 @@ public class SignUpController {
         user.setPassword(pwdPassword.getText());
         user.setLastAccess(Date.valueOf(LocalDate.now()));
         SignableFactory.getSignable().signIn(user);
-
     }
 
     /**
