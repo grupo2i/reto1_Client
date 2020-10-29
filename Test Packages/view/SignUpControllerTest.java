@@ -147,18 +147,23 @@ public class SignUpControllerTest extends ApplicationTest {
         String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
         write(longString);
+        verifyThat("#lblErrorUsername", isVisible());
         verifyThat(maxLengthError, isVisible());
         clickOn("#txtName");
         write(longString);
+        verifyThat("#lblErrorName", isVisible());
         verifyThat(maxLengthError, isVisible());    
         clickOn("#txtEmail");
         write(longString);
+        verifyThat("#lblErrorEmail", isVisible());
         verifyThat(maxLengthError, isVisible());
         clickOn("#pwdPassword");
         write(longString);
+        verifyThat("#lblErrorPassword", isVisible());
         verifyThat(maxLengthError, isVisible());
         clickOn("#pwdConfirmPassword");
         write(longString);
+        verifyThat("#lblErrorConfirmPassword", isVisible());
         verifyThat(maxLengthError, isVisible());
         
         verifyThat("#btnAccept", isDisabled());
