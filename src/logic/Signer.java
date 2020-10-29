@@ -40,6 +40,11 @@ public class Signer implements Signable{
         }
     }
 
+    /**
+     * Helper method to send messages to the server and receive responses.
+     * @param message Message to send. 
+     * @return Server response.
+     */
     private Message sendMessage(Message message) {
         Message serverResponse = null;
         try {
@@ -56,6 +61,9 @@ public class Signer implements Signable{
         return serverResponse;
     }
     
+    /**
+     * Helper method to disconnect the IO and Socket from the server.
+     */
     private void Disconnet() {
         try {
             if(clientOutput != null)
@@ -69,6 +77,11 @@ public class Signer implements Signable{
         }
     }
     
+    /**
+     * Sign up function implementation.
+     * @param user User to sign up.
+     * @return The User in case the application needs it.
+     */
     @Override
     public User signUp(User user) {
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
@@ -77,14 +90,17 @@ public class Signer implements Signable{
             User signUpUser = (User)serverResponse.getData();
             signUpUser.printData();
             break;
-        case CLOSE_CONNECTION:
-            break;
         default:
             break;
         }
         return null;
     }
 
+    /**
+     * Sign in function implementation.
+     * @param user User to sign in.
+     * @return The User in case the application needs it.
+     */
     @Override
     public User signIn(User user) {
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
@@ -93,8 +109,6 @@ public class Signer implements Signable{
             User logInUser = (User)serverResponse.getData();
             System.out.println("Login: " + logInUser.getLogin());
             System.out.println("Password: " + logInUser.getPassword());
-            break;
-        case CLOSE_CONNECTION:
             break;
         default:
             break;
