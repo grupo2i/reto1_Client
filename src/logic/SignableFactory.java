@@ -11,6 +11,7 @@ package logic;
  * @author aitor
  */
 public class SignableFactory {
+    /** Static signer for client/server communication. */
     private static Signer signer;
     
     /**

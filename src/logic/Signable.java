@@ -14,14 +14,14 @@ import user.User;
 public interface Signable {
 
     /**
-     * Sign up method to be implemented by all Signables
+     * Sign up method to be implemented by all Signables.
      * @param user User to sign up.
      * @return User just in case it is needed by the application.
      */
     public User signUp(User user);
 
     /**
-     * Sign in method to be implemented by all Signables
+     * Sign in method to be implemented by all Signables.
      * @param user User to sign in.
      * @return User just in case it is needed by the application.
      */
