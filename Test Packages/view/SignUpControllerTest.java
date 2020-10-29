@@ -70,7 +70,7 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#pwdConfirmPassword", hasText(""));
         verifyThat("#pwdConfirmPassword", isVisible());
         verifyThat("#pwdConfirmPassword", isEnabled());
-        //verifyThat("#lblErrorConfirmPassword", isInvisible());
+        verifyThat("#lblErrorConfirmPassword", isInvisible());
         //Buttons
         verifyThat("#btnLogin", isEnabled());
         verifyThat("#btnLogin", isVisible());
@@ -101,19 +101,14 @@ public class SignUpControllerTest extends ApplicationTest {
     public void testC_emptyTexts() {
         clickOn("#txtUsername");
         write("");
-        //verifyThat("#lblErrorUsername", isVisible());
         clickOn("#txtName");
         write("");
-        //verifyThat("#lblErrorName", isVisible());
         clickOn("#txtEmail");
         write("");
-        //verifyThat("#lblErrorEmail", isVisible());
         clickOn("#pwdPassword");
         write("");
-        //verifyThat("#lblErrorPassword", isVisible());
         clickOn("#pwdConfirmPassword");
         write("");
-        //verifyThat("#lblErrorConfirmPassword", isVisible());
         
         verifyThat("#btnAccept", isDisabled());
     }
