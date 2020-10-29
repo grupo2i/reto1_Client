@@ -20,6 +20,7 @@ import static org.testfx.matcher.base.NodeMatchers.isFocused;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
+
 /**
  * Testing class for Login view and controller. Tests login view behavior using
  * TestFX framework.
