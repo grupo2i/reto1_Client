@@ -69,27 +69,31 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#txtUsername", (TextField t) -> t.isFocused());
         verifyThat("#lblErrorUsername", isInvisible());
+        
         verifyThat("#txtName", hasText(""));
         verifyThat("#txtName", isVisible());
         verifyThat("#txtName", isEnabled());
         verifyThat("#lblErrorName", isInvisible());
+        
         verifyThat("#txtEmail", hasText(""));
         verifyThat("#txtEmail", isVisible());
         verifyThat("#txtEmail", isEnabled());
         verifyThat("#lblErrorEmail", isInvisible());
+        
         verifyThat("#pwdPassword", hasText(""));
         verifyThat("#pwdPassword", isVisible());
         verifyThat("#pwdPassword", isEnabled());
         verifyThat("#lblErrorPassword", isInvisible());
+        
         verifyThat("#pwdConfirmPassword", hasText(""));
         verifyThat("#pwdConfirmPassword", isVisible());
         verifyThat("#pwdConfirmPassword", isEnabled());
         verifyThat("#lblErrorConfirmPassword", isInvisible());
         //Buttons
-        verifyThat("#btnLogin", isEnabled());
         verifyThat("#btnLogin", isVisible());
-        verifyThat("#btnAccept", isDisabled());
+        verifyThat("#btnLogin", isEnabled());
         verifyThat("#btnAccept", isVisible());
+        verifyThat("#btnAccept", isDisabled());
     }
     
     /**
@@ -140,22 +144,47 @@ public class SignUpControllerTest extends ApplicationTest {
     @Test
     //@Ignore
     public void testD_maxLengthText() {
+        String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
         write(longString);
-        verifyThat("#lblErrorUsername", isVisible());
+        verifyThat(maxLengthError, isVisible());
         clickOn("#txtName");
         write(longString);
-        verifyThat("#lblErrorName", isVisible());    
+        verifyThat(maxLengthError, isVisible());    
         clickOn("#txtEmail");
         write(longString);
-        verifyThat("#lblErrorEmail", isVisible());
+        verifyThat(maxLengthError, isVisible());
         clickOn("#pwdPassword");
         write(longString);
-        verifyThat("#lblErrorPassword", isVisible());
+        verifyThat(maxLengthError, isVisible());
         clickOn("#pwdConfirmPassword");
         write(longString);
-        verifyThat("#lblErrorConfirmPassword", isVisible());
+        verifyThat(maxLengthError, isVisible());
         
         verifyThat("#btnAccept", isDisabled());
+    }
+    
+    /**
+     * Tests that the error message is shown when the password is too short .
+     */
+    @Test
+    public void testE_shortPassword() {
+        clickOn("#pwdPassword");
+        write("12345");
+        verifyThat("* Must be at least 6 characters", isVisible());
+    }
+    
+    /**
+     * Tests that the error messages are shown when the user or email formats
+     * are incorrect.
+     */
+    @Test
+    public void testF_userAndEmailFormats() {
+        clickOn("#txtName");
+        write("12345");
+        verifyThat("* Must only contain letters", isVisible());
+        clickOn("#txtEmail");
+        write("12345");
+        verifyThat("* Must match the pattern example@example.com", isVisible());
     }
 }
