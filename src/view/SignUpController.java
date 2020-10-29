@@ -168,7 +168,7 @@ public class SignUpController {
             //Sets the error message when the fiel is empty.
             if (txtUsernameLength == 0) lblErrorUsername.setText("* Field must not be empty");
             //Sets the error message when the field is longer than 255 characters.
-            if (txtUsernameLength > 255) lblErrorUsername.setText("* Must be less than 255 characters");
+            else if (txtUsernameLength > 255) lblErrorUsername.setText("* Must be less than 255 characters");
             
             textFieldErrors.put("txtUsernameError", true);
             lblErrorUsername.setVisible(true);
@@ -208,12 +208,12 @@ public class SignUpController {
 
         //If there is any error...
         if (txtEmailLength == 0 || txtEmailLength > 255 || !matcherEmail.matches()) {
-            //Sets the error message when the field does not match the pattern.
-            if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.com");
             //Sets the error message when the fiel is empty.
             if (txtEmailLength == 0) lblErrorEmail.setText("* Field must not be empty");
             //Sets the error message when the field is longer than 255 characters.
-            if (txtEmailLength > 255) lblErrorEmail.setText("* Must be less than 255 characters");
+            else if (txtEmailLength > 255) lblErrorEmail.setText("* Must be less than 255 characters");
+            //Sets the error message when the field does not match the pattern.
+            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.com");
             
             textFieldErrors.put("txtEmailError", true);
             lblErrorEmail.setVisible(true);
@@ -237,12 +237,13 @@ public class SignUpController {
 
         //If there is any error...
         if (txtNameLength == 0 || txtNameLength > 255 || !matcherName.matches()) {
-            //Sets the error message when the field does not match the pattern.
-            if (!matcherName.matches()) lblErrorName.setText("* Must only contain letters");
             //Sets the error message when the fiel is empty.
             if (txtNameLength == 0) lblErrorName.setText("* Field must not be empty");
             //Sets the error message when the field is longer than 255 characters.
-            if (txtNameLength > 255) lblErrorName.setText("* Must be less than 255 characters");
+            else if (txtNameLength > 255) lblErrorName.setText("* Must be less than 255 characters");
+            //Sets the error message when the field does not match the pattern.
+            else if (!matcherName.matches()) lblErrorName.setText("* Must only contain letters");
+            
             textFieldErrors.put("txtNameError", true);
             lblErrorName.setVisible(true);
         } else {
@@ -266,7 +267,7 @@ public class SignUpController {
             //Sets the error message when the fiel is shorter than 6 characters.
             if (pwdPasswordLength < 6) lblErrorPassword.setText("* Must be at least 6 characters");
             //Sets the error message when the field is longer than 255 characters.
-            if (pwdPasswordLength > 255) lblErrorPassword.setText("* Must be less than 255 characters");
+            else if (pwdPasswordLength > 255) lblErrorPassword.setText("* Must be less than 255 characters");
             
             textFieldErrors.put("pwdPasswordError", true);
             lblErrorPassword.setVisible(true);
@@ -274,9 +275,15 @@ public class SignUpController {
             textFieldErrors.put("pwdPasswordError", false);
             lblErrorPassword.setVisible(false);
         }
-
-        //If pwdConfirmPassword does not match with pwdPassword...
         
+        //If pwdConfirmPassword does not match with pwdPassword...
+        if (!pwdConfirmPassword.getText().equals(pwdPassword.getText())) {
+            textFieldErrors.put("pwdConfirmPasswordError", true);
+            lblErrorConfirmPassword.setVisible(true);
+        } else {
+            textFieldErrors.put("pwdConfirmPasswordError", false);
+            lblErrorConfirmPassword.setVisible(false);
+        }
 
         //Tests if there is any input error and disables btnAccept if so.
         testInputErrors();
