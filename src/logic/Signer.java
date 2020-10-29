@@ -5,6 +5,11 @@
  */
 package logic;
 
+import exceptions.EmailAlreadyExistsException;
+import exceptions.PasswordDoesNotMatchException;
+import exceptions.UnexpectedErrorException;
+import exceptions.UserAlreadyExistsException;
+import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -81,17 +86,24 @@ public class Signer implements Signable{
      * Sign up function implementation.
      * @param user User to sign up.
      * @return The User in case the application needs it.
+     * @throws UserAlreadyExistsException If the username is found in the DB.
+     * @throws EmailAlreadyExistsException If the email is found in the DB.
+     * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signUp(User user) {
+    public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
         switch(serverResponse.getType()) {
         case SIGN_UP:
             User signUpUser = (User)serverResponse.getData();
             signUpUser.printData();
             break;
+        case USER_ALREADY_EXISTS:
+            throw new UserAlreadyExistsException(user);
+        case EMAIL_ALREADY_EXISTS:
+            throw new EmailAlreadyExistsException(user);
         default:
-            break;
+            throw new UnexpectedErrorException();
         }
         return null;
     }
@@ -100,9 +112,13 @@ public class Signer implements Signable{
      * Sign in function implementation.
      * @param user User to sign in.
      * @return The User in case the application needs it.
+     * @throws exceptions.UserNotFoundException If the username is not found in the DB.
+     * @throws exceptions.PasswordDoesNotMatchException If the password does not 
+     * match with the username in the DB.
+     * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signIn(User user) {
+    public User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
         switch(serverResponse.getType()) {
         case SIGN_IN:
@@ -110,8 +126,12 @@ public class Signer implements Signable{
             System.out.println("Login: " + logInUser.getLogin());
             System.out.println("Password: " + logInUser.getPassword());
             break;
+        case USER_NOT_FOUND:
+            throw new UserNotFoundException(user);
+        case PASSWORD_DOES_NOT_MATCH:
+            throw new PasswordDoesNotMatchException(user);
         default:
-            break;
+            throw new UnexpectedErrorException();
         }
         return null;
     }

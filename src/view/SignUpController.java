@@ -5,6 +5,11 @@
  */
 package view;
 
+import exceptions.EmailAlreadyExistsException;
+import exceptions.PasswordDoesNotMatchException;
+import exceptions.UnexpectedErrorException;
+import exceptions.UserAlreadyExistsException;
+import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -146,13 +151,18 @@ public class SignUpController {
 
     @FXML
     public void handleButtonAccept(ActionEvent event) {
-        User user = new User();
-        user.setLogin(txtUsername.getText());
-        user.setEmail(txtEmail.getText());
-        user.setFullName(txtName.getText());
-        user.setPassword(pwdPassword.getText());
-        user.setLastAccess(Date.valueOf(LocalDate.now()));
-        SignableFactory.getSignable().signIn(user);
+        try{
+            User user = new User();
+            user.setLogin(txtUsername.getText());
+            user.setEmail(txtEmail.getText());
+            user.setFullName(txtName.getText());
+            user.setPassword(pwdPassword.getText());
+            user.setLastAccess(Date.valueOf(LocalDate.now()));
+            SignableFactory.getSignable().signUp(user);
+        } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     /**
