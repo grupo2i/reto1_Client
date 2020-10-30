@@ -24,10 +24,13 @@ import user.User;
  * @author Martin Angulo
  */
 public class Signer implements Signable{
+    /** Port to connect to the server. */
     private static final int PORT = 5005;
-    
+    /** Client socket that connects to the servers socket. */
     private Socket clientSocket = null;
+    /** Input stream to receive objects from the server. */
     private ObjectInputStream serverInput = null;
+    /** Output stream to send objects to the server. */
     private ObjectOutputStream clientOutput = null;
     
     /**

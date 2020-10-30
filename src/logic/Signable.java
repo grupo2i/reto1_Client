@@ -19,7 +19,7 @@ import user.User;
 public interface Signable {
 
     /**
-     * Sign up method to be implemented by all Signables
+     * Sign up method to be implemented by all Signables.
      * @param user User to sign up.
      * @return User just in case it is needed by the application.
      * @throws UserAlreadyExistsException If the username is found in the DB.
@@ -29,7 +29,7 @@ public interface Signable {
     public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException;
 
     /**
-     * Sign in method to be implemented by all Signables
+     * Sign in method to be implemented by all Signables.
      * @param user User to sign in.
      * @return User just in case it is needed by the application.
      * @throws exceptions.UserNotFoundException If the username is not found in the DB.
