@@ -6,6 +6,9 @@
 package view;
 
 
+import exceptions.PasswordDoesNotMatchException;
+import exceptions.UnexpectedErrorException;
+import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
@@ -74,11 +77,17 @@ public class LogInController {
     }   
     @FXML
     public void handleButtonAccept(ActionEvent event) {
-        User user = new User();
-        user.setLogin(txtUsername.getText());
-        user.setPassword(pwdPassword.getText());
-        user.setLastAccess(Date.valueOf(LocalDate.now()));
-        SignableFactory.getSignable().signIn(user);
+        try{
+            User user = new User();
+            user.setLogin(txtUsername.getText());
+            user.setPassword(pwdPassword.getText());
+            user.setLastAccess(Date.valueOf(LocalDate.now()));
+            SignableFactory.getSignable().signIn(user);
+        } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        }
+        
         
     }
     
