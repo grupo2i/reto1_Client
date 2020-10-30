@@ -102,9 +102,9 @@ public class Signer implements Signable{
             signUpUser.printData();
             break;
         case USER_ALREADY_EXISTS:
-            throw new UserAlreadyExistsException(user);
+            throw new UserAlreadyExistsException(user.getLogin());
         case EMAIL_ALREADY_EXISTS:
-            throw new EmailAlreadyExistsException(user);
+            throw new EmailAlreadyExistsException(user.getEmail());
         default:
             throw new UnexpectedErrorException();
         }
@@ -130,9 +130,9 @@ public class Signer implements Signable{
             System.out.println("Password: " + logInUser.getPassword());
             break;
         case USER_NOT_FOUND:
-            throw new UserNotFoundException(user);
+            throw new UserNotFoundException(user.getLogin());
         case PASSWORD_DOES_NOT_MATCH:
-            throw new PasswordDoesNotMatchException(user);
+            throw new PasswordDoesNotMatchException();
         default:
             throw new UnexpectedErrorException();
         }
