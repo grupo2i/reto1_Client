@@ -16,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import message.Message;
 import user.User;
 
@@ -59,13 +61,19 @@ public class Signer implements Signable{
             //Send message to server
             clientOutput.writeObject(message);
             clientOutput.flush();
+        } catch (IOException ex) {
+            System.out.println("IOException on Client output");
+        }
+        
+        try {
             //Receive response
             serverResponse = (Message)serverInput.readObject();
         } catch (IOException ex) {
-            System.out.println("IOException: " + ex.getMessage());
+            System.out.println("IOException on server input");
         } catch (ClassNotFoundException ex) {
-            System.out.println("ClassNotFoundException: " + ex.getMessage());
+            System.out.println("ClassNotFoundException on server input");
         }
+        
         return serverResponse;
     }
     
@@ -96,6 +104,7 @@ public class Signer implements Signable{
     @Override
     public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
+        System.out.println("Message of type: " + serverResponse.getClass());
         switch(serverResponse.getType()) {
         case SIGN_UP:
             User signUpUser = (User)serverResponse.getData();
