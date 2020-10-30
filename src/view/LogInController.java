@@ -110,6 +110,7 @@ public class LogInController {
         stage.setScene(scene);
         stage.setTitle("Log In");
         stage.setResizable(false);
+        txtUsername.requestFocus();
         txtUsername.textProperty().addListener(this::textChangedUser);
         pwdPassword.textProperty().addListener(this::textChangedPassword);
         btnAccept.setDisable(true);
