@@ -5,7 +5,6 @@
  */
 package view;
 
-import application.ClientApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -161,10 +160,6 @@ public class SignUpControllerTest extends ApplicationTest {
         write(longString);
         verifyThat("#lblErrorPassword", isVisible());
         verifyThat(maxLengthError, isVisible());
-        clickOn("#pwdConfirmPassword");
-        write(longString);
-        verifyThat("#lblErrorConfirmPassword", isVisible());
-        verifyThat(maxLengthError, isVisible());
         
         verifyThat("#btnAccept", isDisabled());
     }
@@ -176,6 +171,7 @@ public class SignUpControllerTest extends ApplicationTest {
     public void testE_shortPassword() {
         clickOn("#pwdPassword");
         write("12345");
+        verifyThat("#lblErrorPassword", isVisible());
         verifyThat("* Must be at least 6 characters", isVisible());
     }
     
