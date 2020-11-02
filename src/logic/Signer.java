@@ -94,13 +94,12 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
+    public synchronized User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
         switch(serverResponse.getType()) {
         case SIGN_UP:
             User signUpUser = (User)serverResponse.getData();
-            signUpUser.printData();
-            break;
+            return signUpUser;
         case USER_ALREADY_EXISTS:
             throw new UserAlreadyExistsException(user.getLogin());
         case EMAIL_ALREADY_EXISTS:
@@ -108,7 +107,6 @@ public class Signer implements Signable{
         default:
             throw new UnexpectedErrorException();
         }
-        return null;
     }
 
     /**
@@ -121,14 +119,12 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
+    public synchronized User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
         Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
         switch(serverResponse.getType()) {
         case SIGN_IN:
             User logInUser = (User)serverResponse.getData();
-            System.out.println("Login: " + logInUser.getLogin());
-            System.out.println("Password: " + logInUser.getPassword());
-            break;
+            return logInUser;
         case USER_NOT_FOUND:
             throw new UserNotFoundException(user.getLogin());
         case PASSWORD_DOES_NOT_MATCH:
@@ -136,6 +132,5 @@ public class Signer implements Signable{
         default:
             throw new UnexpectedErrorException();
         }
-        return null;
     }
 }

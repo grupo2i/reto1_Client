@@ -157,10 +157,10 @@ public class SignUpController {
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
             user.setPassword(pwdPassword.getText());
-            user.setLastAccess(Date.valueOf(LocalDate.now()));
-            SignableFactory.getSignable().signUp(user);
-        } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            user = SignableFactory.getSignable().signUp(user);
+            System.out.println("Successful sign up for user " + user.getLogin() + "with ID: " + user.getId());
+        } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
     }

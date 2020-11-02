@@ -5,13 +5,11 @@
  */
 package view;
 
-
 import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -28,8 +26,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import logic.SignableFactory;
-import message.Message;
-import message.Message.Type;
 import user.User;
 
 
@@ -82,7 +78,7 @@ public class LogInController {
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
             user.setLastAccess(Date.valueOf(LocalDate.now()));
-            SignableFactory.getSignable().signIn(user);
+            user = SignableFactory.getSignable().signIn(user);
         } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.showAndWait();
