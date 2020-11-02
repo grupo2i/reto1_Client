@@ -79,12 +79,24 @@ public class LogInController {
             user.setPassword(pwdPassword.getText());
             user.setLastAccess(Date.valueOf(LocalDate.now()));
             user = SignableFactory.getSignable().signIn(user);
+            switchToLogOutWindow();
         } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
-        
-        
+    }
+    
+    private void switchToLogOutWindow() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
+            Parent root =(Parent)loader.load();
+            LogOutController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            alert.showAndWait();
+        } 
     }
     
     boolean errorUsername=true;
