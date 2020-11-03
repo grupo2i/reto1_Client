@@ -159,13 +159,13 @@ public class SignUpController {
             user.setFullName(txtName.getText());
             user.setPassword(pwdPassword.getText());
             user = SignableFactory.getSignable().signUp(user);
-            System.out.println("Successful sign up for user " + user.getLogin() + "with ID: " + user.getId());
             switchToLogOutWindow();
         } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
     }
+
     private void switchToLogOutWindow() {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
