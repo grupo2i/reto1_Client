@@ -8,9 +8,9 @@ import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ResourceBundle;
 import message.Message;
 import user.User;
 
@@ -19,8 +19,6 @@ import user.User;
  * @author Martin Angulo
  */
 public class Signer implements Signable{
-    /** Port to connect to the server. */
-    private static final int PORT = 5005;
     /** Client socket that connects to the servers socket. */
     private Socket clientSocket = null;
     /** Input stream to receive objects from the server. */
@@ -33,7 +31,12 @@ public class Signer implements Signable{
      */
     public Signer() {
         try {
-            clientSocket = new Socket(InetAddress.getLocalHost(), PORT);
+            //Getting the client-server communication properties.
+            ResourceBundle configFile = ResourceBundle.getBundle("configuration.config");
+            Integer port = Integer.valueOf(configFile.getString("Port"));
+            String serverHost = configFile.getString("ServerHost");
+            //Initializing the client-server communication.
+            clientSocket = new Socket(serverHost, port);
             serverInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (UnknownHostException ex) {
