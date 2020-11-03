@@ -107,6 +107,7 @@ public class SignUpController {
         btnAccept.setDisable(true);
         btnAccept.setTooltip(
                 new Tooltip("Pulse para validar credenciales"));
+        btnAccept.setDefaultButton(true);
 
         stage.show();
     }
@@ -164,7 +165,7 @@ public class SignUpController {
             alert.showAndWait();
         }
     }
-    
+
     private void switchToLogOutWindow() {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
