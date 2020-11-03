@@ -41,11 +41,10 @@ public class LogOutController {
     public void handleButtonLogOut(ActionEvent event) {
         try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
-        Parent root = (Parent) loader.load();
-
-        SignUpController controller = (loader.getController());
+        Parent root =(Parent)loader.load();
+        LogInController controller = (loader.getController());
         controller.setStage(stage);
-        controller.initStage(root);
+        controller.initStage(root); 
         } catch(IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
@@ -81,6 +80,7 @@ public class LogOutController {
                 new Tooltip("Click to log out "));
         btnExit.setTooltip(
                 new Tooltip("Click to close application"));
+        btnLogOut.setDefaultButton(true);
         stage.show();
     }
  

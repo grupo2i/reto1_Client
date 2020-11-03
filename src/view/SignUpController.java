@@ -107,6 +107,7 @@ public class SignUpController {
         btnAccept.setDisable(true);
         btnAccept.setTooltip(
                 new Tooltip("Pulse para validar credenciales"));
+        btnAccept.setDefaultButton(true);
 
         stage.show();
     }
@@ -159,10 +160,23 @@ public class SignUpController {
             user.setPassword(pwdPassword.getText());
             user = SignableFactory.getSignable().signUp(user);
             System.out.println("Successful sign up for user " + user.getLogin() + "with ID: " + user.getId());
+            switchToLogOutWindow();
         } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
+    }
+    private void switchToLogOutWindow() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
+            Parent root =(Parent)loader.load();
+            LogOutController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            alert.showAndWait();
+        } 
     }
 
     /**

@@ -62,7 +62,6 @@ public class LogInController {
         try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
         Parent root = (Parent) loader.load();
-
         SignUpController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
@@ -79,12 +78,25 @@ public class LogInController {
             user.setPassword(pwdPassword.getText());
             user.setLastAccess(Date.valueOf(LocalDate.now()));
             user = SignableFactory.getSignable().signIn(user);
+            switchToLogOutWindow();
         } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
         
         
+    }
+    private void switchToLogOutWindow() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
+            Parent root =(Parent)loader.load();
+            LogOutController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch(IOException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            alert.showAndWait();
+        } 
     }
     
     boolean errorUsername=true;
@@ -116,6 +128,7 @@ public class LogInController {
                 new Tooltip("Click to send credentials "));
         btnSignUp.setTooltip(
                 new Tooltip("Click to navigate to Sign Up"));
+        btnAccept.setDefaultButton(true);
         stage.show();
     }
     /**
@@ -174,4 +187,7 @@ public class LogInController {
              btnAccept.setDisable(false);
          }
      }    
+
+
 }
+

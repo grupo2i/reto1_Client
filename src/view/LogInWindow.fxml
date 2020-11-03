@@ -13,20 +13,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="imagenFdondo" fx:id="fxPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogInController">
+<Pane id="imagenFdondo" fx:id="fxPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogInController">
    <children>
       <ImageView fitHeight="429.0" fitWidth="697.0" layoutX="-6.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@..\images\fondo.jpg" />
+            <Image url="@../images/fondo.jpg" />
          </image>
       </ImageView>
       <ImageView fitHeight="316.0" fitWidth="566.0" layoutX="47.0" layoutY="77.0" pickOnBounds="true">
          <image>
-            <Image url="@..\images\rectangle.png" />
+            <Image url="@../images/rectangle.png" />
          </image>
       </ImageView>
       <Button fx:id="btnSignUp" layoutX="476.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="35.0" prefWidth="80.0" text="Sign Up" textFill="#1d3557" />
-      <Button fx:id="btnAccept" layoutX="577.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonAccept" prefHeight="35.0" prefWidth="80.0" text="Accept" textFill="#1d3557" />
+      <Button fx:id="btnAccept" defaultButton="true" layoutX="577.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonAccept" prefHeight="35.0" prefWidth="80.0" text="Accept" textFill="#1d3557" />
       <Label fx:id="lblErrorLogin" layoutX="273.0" layoutY="137.0" prefHeight="26.0" prefWidth="337.0" text="* Error" textFill="#ff0015">
          <font>
             <Font size="17.0" />
@@ -69,7 +69,7 @@
          </effect></Label>
       <ImageView fitHeight="111.0" fitWidth="111.0" layoutX="264.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@..\images\user.png" />
+            <Image url="@../images/user.png" />
          </image>
          <effect>
             <DropShadow color="#ffcdcd" />
