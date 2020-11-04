@@ -72,7 +72,7 @@ public class LogInController {
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
             user.setLastAccess(Date.valueOf(LocalDate.now()));
-            user = SignableFactory.getSignable().signIn(user);
+            SignableFactory.getSignable().signIn(user);
             switchToLogOutWindow();
         } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
@@ -88,7 +88,7 @@ public class LogInController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch(IOException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
             alert.showAndWait();
         } 
     }

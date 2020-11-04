@@ -40,13 +40,13 @@ public class LogOutController {
     @FXML
     public void handleButtonLogOut(ActionEvent event) {
         try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
-        Parent root =(Parent)loader.load();
-        LogInController controller = (loader.getController());
-        controller.setStage(stage);
-        controller.initStage(root); 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+            Parent root =(Parent)loader.load();
+            LogInController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root); 
         } catch(IOException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign In window.", ButtonType.OK);
             alert.showAndWait();
         } 
     }   
