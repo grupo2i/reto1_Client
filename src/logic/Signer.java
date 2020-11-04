@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import message.Message;
 import user.User;
 
@@ -28,8 +29,9 @@ public class Signer implements Signable{
     
     /**
      * Signer constructor, connects to the server and initializes IO.
+     * @throws exceptions.UnexpectedErrorException
      */
-    public Signer() {
+    public Signer() throws UnexpectedErrorException {
         try {
             //Getting the client-server communication properties.
             ResourceBundle configFile = ResourceBundle.getBundle("configuration.config");
@@ -39,10 +41,9 @@ public class Signer implements Signable{
             clientSocket = new Socket(serverHost, port);
             serverInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (UnknownHostException ex) {
-            System.out.println("UnknownHostException: " + ex.getMessage());
-        } catch (IOException ie) {
-            System.out.println("IOException: " + ie.getMessage());
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer started successfully.");
+        } catch (IOException ex) {
+            throw new UnexpectedErrorException(ex.getMessage());
         }
     }
 
@@ -51,19 +52,18 @@ public class Signer implements Signable{
      * @param message Message to send. 
      * @return Server response.
      */
-    private Message sendMessage(Message message) {
+    private Message sendMessage(Message message) throws UnexpectedErrorException {
         Message serverResponse = null;
         try {
             //Send message to server
             clientOutput.writeObject(message);
             clientOutput.flush();
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Message sent to the server.");
             //Receive response
             serverResponse = (Message)serverInput.readObject();
-            
-        } catch (IOException ex) {
-            System.out.println("IOException: " + ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            System.out.println("ClassNotFoundException: " + ex.getMessage());
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Server response recieved.");
+        } catch (ClassNotFoundException | IOException ex) {
+            throw new UnexpectedErrorException(ex.getMessage());
         }finally{
             disconnect();
         }
@@ -81,6 +81,7 @@ public class Signer implements Signable{
                 serverInput.close();
             if (clientSocket != null)
                 clientSocket.close();
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer disconnected.");
         } catch(IOException ie) {
             System.out.println("Socket Close Error: " + ie.getMessage());
         }
@@ -106,7 +107,7 @@ public class Signer implements Signable{
         case EMAIL_ALREADY_EXISTS:
             throw new EmailAlreadyExistsException(user.getEmail());
         default:
-            throw new UnexpectedErrorException();
+            throw new UnexpectedErrorException("No response recieved from the server.");
         }
     }
 
@@ -131,7 +132,7 @@ public class Signer implements Signable{
         case PASSWORD_DOES_NOT_MATCH:
             throw new PasswordDoesNotMatchException();
         default:
-            throw new UnexpectedErrorException();
+            throw new UnexpectedErrorException("No response recieved from the server.");
         }
     }
 }
