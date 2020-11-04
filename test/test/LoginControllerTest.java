@@ -6,6 +6,7 @@
 package test;
 
 import application.ClientApplication;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
@@ -51,6 +52,7 @@ public class LoginControllerTest extends ApplicationTest {
     /**
      * Test the login view.
      */
+    
     @Test
     public void test1_InitialState() {
         verifyThat("#txtUsername", isEnabled());
@@ -111,5 +113,13 @@ public class LoginControllerTest extends ApplicationTest {
         doubleClickOn("#pwdPassword");
         write("123456");
         verifyThat("#btnAccept", isEnabled());
+    }
+    @Test
+    public void test8_UserExists(){
+        clickOn("#txtUsername");
+        write("mamaduk");
+        clickOn("#pwdPassword");
+        write("abcd*1234");
+        clickOn("#btnAccept");
     }
 }

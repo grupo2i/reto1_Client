@@ -6,6 +6,8 @@
 package test;
 
 import application.ClientApplication;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
@@ -17,27 +19,35 @@ import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import view.LogOutController;
 
 /**
- * Testing class for Log Out and controller.
- * TestFX framework.
+ * Testing class for Log Out and controller. TestFX framework.
+ *
  * @author Lorena
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class LogOutControllerTest extends ApplicationTest{
-     /**
+public class LogOutControllerTest extends ApplicationTest {
+
+    /**
      * Starts application to be tested.
      *
      * @param stage Primary Stage object
      * @throws Exception if we have any error
      */
-     @Override
+    @Override
     public void start(Stage stage) throws Exception {
-        new ClientApplication().start(stage);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
+        Parent root = (Parent) loader.load();
+        LogOutController controller = (loader.getController());
+        controller.setStage(stage);
+        controller.initStage(root);
     }
-    
+
     @Test
-    public void test1(){
-        
-    }    
+    public void test1() {
+        clickOn("#btnLogOut");
+        verifyThat("#btnSignUp", isEnabled());
+
+    }
 }
