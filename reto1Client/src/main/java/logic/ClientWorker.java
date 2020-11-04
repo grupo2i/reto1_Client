@@ -95,7 +95,7 @@ public class ClientWorker extends Thread {
             serverResponse = (Message)serverInput.readObject();
             Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Server response recieved.");
         } catch (ClassNotFoundException | IOException ex) {
-            throw new UnexpectedErrorException(ex.getMessage());
+            serverResponse = new Message(Message.Type.UNEXPECTED_ERROR, null);
         }finally{
             disconnect();
         }
