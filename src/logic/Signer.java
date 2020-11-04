@@ -59,10 +59,13 @@ public class Signer implements Signable{
             clientOutput.flush();
             //Receive response
             serverResponse = (Message)serverInput.readObject();
+            
         } catch (IOException ex) {
             System.out.println("IOException: " + ex.getMessage());
         } catch (ClassNotFoundException ex) {
             System.out.println("ClassNotFoundException: " + ex.getMessage());
+        }finally{
+            disconnect();
         }
         return serverResponse;
     }
@@ -70,7 +73,7 @@ public class Signer implements Signable{
     /**
      * Helper method to disconnect the IO and Socket from the server.
      */
-    private void Disconnet() {
+    private void disconnect() {
         try {
             if(clientOutput != null)
                 clientOutput.close();
