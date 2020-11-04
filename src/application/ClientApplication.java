@@ -23,6 +23,7 @@ public class ClientApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
         Parent root =(Parent)loader.load();
         LogInController controller = (loader.getController());
+        primaryStage.setResizable(Boolean.FALSE);
         controller.setStage(primaryStage);
         controller.initStage(root); 
         
