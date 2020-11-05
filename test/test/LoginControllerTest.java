@@ -6,7 +6,6 @@
 package test;
 
 import application.ClientApplication;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
@@ -18,7 +17,6 @@ import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-
 
 /**
  * Testing class for Login view and controller. Tests login view behavior using
@@ -52,7 +50,6 @@ public class LoginControllerTest extends ApplicationTest {
     /**
      * Test the login view.
      */
-    
     @Test
     public void test1_InitialState() {
         verifyThat("#txtUsername", isEnabled());
@@ -64,6 +61,9 @@ public class LoginControllerTest extends ApplicationTest {
 
     }
 
+    /**
+     * Test the User length is less than 255.
+     */
     @Test
     public void test2_TxtUsuarioMaximumLength() {
         doubleClickOn("#txtUsername");
@@ -71,6 +71,10 @@ public class LoginControllerTest extends ApplicationTest {
         verifyThat("#btnAccept", isDisabled());
         verifyThat("* Must be less than 255 characters", isVisible());
     }
+
+    /**
+     * Test the password length is less than 255.
+     */
 
     @Test
     public void test3_PwdPasswordMaximumLength() {
@@ -80,6 +84,9 @@ public class LoginControllerTest extends ApplicationTest {
         verifyThat("* Must be less than 255 characters", isVisible());
     }
 
+    /**
+     * Test the User is not empty.
+     */
     @Test
     public void test4_TxtUsuarioNotEmpty() {
         doubleClickOn("#txtUsername");
@@ -88,6 +95,10 @@ public class LoginControllerTest extends ApplicationTest {
         eraseText(11);
         verifyThat("* Field must not be empty", isVisible());
     }
+
+    /**
+     * Test the User is correct.
+     */
 
     @Test
     public void test5_TxtUsuarioIsCorrect() {
@@ -98,6 +109,9 @@ public class LoginControllerTest extends ApplicationTest {
         verifyThat("#btnAccept", isEnabled());
     }
 
+    /**
+     * Test the Password length is the minimum.
+     */
     @Test
     public void test6_PwdPasswordMinimumLength() {
         doubleClickOn("#pwdPassword");
@@ -106,6 +120,9 @@ public class LoginControllerTest extends ApplicationTest {
         verifyThat("* Must be at least 6 characters", isVisible());
     }
 
+    /**
+     * Test the Password is correct.
+     */
     @Test
     public void test7_PwdPasswordIsCorrect() {
         doubleClickOn("#txtUsername");
@@ -114,8 +131,12 @@ public class LoginControllerTest extends ApplicationTest {
         write("123456");
         verifyThat("#btnAccept", isEnabled());
     }
+
+    /**
+     * Test the User exist in the database.
+     */
     @Test
-    public void test8_UserExists(){
+    public void test8_UserExists() {
         clickOn("#txtUsername");
         write("mamaduk");
         clickOn("#pwdPassword");
