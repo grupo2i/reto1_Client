@@ -35,7 +35,7 @@ public class Signer implements Signable{
         try {
             worker.join();
         } catch (InterruptedException ex) {
-            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "", ex);
+            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "InterruptedException: {0}", ex.getMessage());
         }
         Message serverResponse = worker.getMessage();
         switch(serverResponse.getType()) {
