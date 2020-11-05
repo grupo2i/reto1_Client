@@ -12,7 +12,6 @@ import org.junit.runners.MethodSorters;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
 import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;

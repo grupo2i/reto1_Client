@@ -14,7 +14,7 @@ import view.LogOutController;
 /**
  * Testing class for Log Out and controller. TestFX framework.
  *
- * @author Lorena
+ * @author Lorena Fernandez
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LogOutControllerTest extends ApplicationTest {
