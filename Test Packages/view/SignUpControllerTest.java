@@ -17,10 +17,13 @@ import org.junit.runners.MethodSorters;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
+import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isInvisible;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import org.testfx.matcher.base.WindowMatchers;
 
 /**
  * Test class for the SignUpController.
@@ -141,7 +144,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * than MAX_TEXT_LENGTH and that the accept button is disabled.
      */
     @Test
-    //@Ignore
+    @Ignore
     public void testD_maxLengthText() {
         String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
@@ -187,5 +190,52 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtEmail");
         write("12345");
         verifyThat("* Must match the pattern example@example.com", isVisible());
+    }
+    
+    /**
+     * Tests that the window changes when the login button is clicked.
+     */
+    @Test
+    public void testG_changeLogInWindow() {
+        clickOn("#btnLogin");
+        verifyThat(window("Log In"), WindowMatchers.isShowing());
+    }
+    
+    /**
+     * Tests that the window changes when the accept button is clicked.
+     */
+    @Test
+    public void testH_changeLogOutWindow() {
+        testB_fillAllData();
+        clickOn("#btnAccept");
+        verifyThat(window("Log Out"), WindowMatchers.isShowing());
+    }
+    
+    /**
+     * Tests that the alert shows when the user already exists.
+     */
+    @Test
+    public void testI_verifyAlertUsername() {
+        //User exists
+        testB_fillAllData();
+        clickOn("#txtEmail");
+        write("A");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        clickOn("OK");
+    }
+    
+    /**
+     * Tests that the alert shows when the email already exists.
+     */
+    @Test
+    public void testJ_verifyAlertEmail() {
+        //Email exists
+        testB_fillAllData();
+        clickOn("#txtUsername");
+        write("A");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        clickOn("OK");
     }
 }
