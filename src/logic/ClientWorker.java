@@ -5,23 +5,15 @@
  */
 package logic;
 
-import exceptions.EmailAlreadyExistsException;
-import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
-import exceptions.UserAlreadyExistsException;
-import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.sql.Date;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import message.Message;
-import user.User;
 
 /**
  * Handles messages from the server.
@@ -35,11 +27,16 @@ public class ClientWorker extends Thread {
     /** Output stream to send objects to the server. */
     private ObjectOutputStream clientOutput = null;
     
+    Message message = null;
+    
     /**
-     * ClientWorker constructor, connects to the server and initializes IO.
+     * Signer constructor, connects to the server and initializes IO.
+     * @param message
+     * @throws exceptions.UnexpectedErrorException
      */
-    public ClientWorker() {
+    public ClientWorker(Message message) throws UnexpectedErrorException {
         try {
+            this.message = message;
             //Getting the client-server communication properties.
             ResourceBundle configFile = ResourceBundle.getBundle("configuration.config");
             Integer port = Integer.valueOf(configFile.getString("Port"));
@@ -48,10 +45,27 @@ public class ClientWorker extends Thread {
             clientSocket = new Socket(serverHost, port);
             serverInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (UnknownHostException ex) {
-            System.out.println("UnknownHostException: " + ex.getMessage());
-        } catch (IOException ie) {
-            System.out.println("IOException: " + ie.getMessage());
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer started successfully.");
+        } catch (IOException ex) {
+            throw new UnexpectedErrorException(ex.getMessage());
+        }
+    }
+
+        
+    /**
+     * Helper method to disconnect the IO and Socket from the server.
+     */
+    private void disconnect() {
+        try {
+            if(clientOutput != null)
+                clientOutput.close();
+            if(serverInput != null)
+                serverInput.close();
+            if (clientSocket != null)
+                clientSocket.close();
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer disconnected.");
+        } catch(IOException ie) {
+            System.out.println("Socket Close Error: " + ie.getMessage());
         }
     }
     
@@ -66,80 +80,16 @@ public class ClientWorker extends Thread {
             //Send message to server
             clientOutput.writeObject(message);
             clientOutput.flush();
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Message sent to the server.");
             //Receive response
             serverResponse = (Message)serverInput.readObject();
-            
-        } catch (IOException ex) {
-            System.out.println("IOException: " + ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            System.out.println("ClassNotFoundException: " + ex.getMessage());
+            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Server response recieved.");
+        } catch (ClassNotFoundException | IOException ex) {
+            serverResponse = new Message(Message.Type.UNEXPECTED_ERROR, null);
         }finally{
             disconnect();
         }
         return serverResponse;
-    }
-    
-    /**
-     * Helper method to disconnect the IO and Socket from the server.
-     */
-    private void disconnect() {
-        try {
-            if(clientOutput != null)
-                clientOutput.close();
-            if(serverInput != null)
-                serverInput.close();
-            if (clientSocket != null)
-                clientSocket.close();
-        } catch(IOException ie) {
-            System.out.println("Socket Close Error: " + ie.getMessage());
-        }
-    }
-    
-    /**
-     * Sign up function implementation.
-     * @param user User to sign up.
-     * @return The User in case the application needs it.
-     * @throws UserAlreadyExistsException If the username is found in the DB.
-     * @throws EmailAlreadyExistsException If the email is found in the DB.
-     * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
-     */
-    public synchronized User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
-        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
-        switch(serverResponse.getType()) {
-        case SIGN_UP:
-            User signUpUser = (User)serverResponse.getData();
-            return signUpUser;
-        case USER_ALREADY_EXISTS:
-            throw new UserAlreadyExistsException(user.getLogin());
-        case EMAIL_ALREADY_EXISTS:
-            throw new EmailAlreadyExistsException(user.getEmail());
-        default:
-            throw new UnexpectedErrorException();
-        }
-    }
-
-    /**
-     * Sign in function implementation.
-     * @param user User to sign in.
-     * @return The User in case the application needs it.
-     * @throws exceptions.UserNotFoundException If the username is not found in the DB.
-     * @throws exceptions.PasswordDoesNotMatchException If the password does not 
-     * match with the username in the DB.
-     * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
-     */
-    public synchronized User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
-        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
-        switch(serverResponse.getType()) {
-        case SIGN_IN:
-            User logInUser = (User)serverResponse.getData();
-            return logInUser;
-        case USER_NOT_FOUND:
-            throw new UserNotFoundException(user.getLogin());
-        case PASSWORD_DOES_NOT_MATCH:
-            throw new PasswordDoesNotMatchException();
-        default:
-            throw new UnexpectedErrorException();
-        }
     }
     
     /*
@@ -147,6 +97,10 @@ public class ClientWorker extends Thread {
      */
     @Override
     public void run() {
-        
+        message = sendMessage(message);
+    }
+    
+    public Message getMessage() {
+        return message;
     }
 }
