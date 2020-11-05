@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import view.LogInController;
 
 /**
- *
+ * Main class for client application
  * @author aitor
  */
 

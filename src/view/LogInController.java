@@ -64,7 +64,11 @@ public class LogInController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
         } 
-    }   
+    }
+    /**
+     * Tries to log in, if introduced fields ok enters to app.
+     * @param event
+     */
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         try{
@@ -78,7 +82,9 @@ public class LogInController {
             alert.showAndWait();
         }
     }
-    
+    /**
+     * if introduced data ok switch to log out.
+     */
     private void switchToLogOutWindow() {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
@@ -178,7 +184,5 @@ public class LogInController {
              btnAccept.setDisable(false);
          }
      }    
-
-
 }
 
