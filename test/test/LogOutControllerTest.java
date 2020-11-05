@@ -5,7 +5,6 @@
  */
 package test;
 
-import application.ClientApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
@@ -14,11 +13,7 @@ import org.junit.Test;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
-import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
-import static org.testfx.matcher.base.NodeMatchers.isFocused;
-import static org.testfx.matcher.base.NodeMatchers.isInvisible;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import view.LogOutController;
 
 /**
