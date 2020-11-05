@@ -39,10 +39,12 @@ public class LogOutControllerTest extends ApplicationTest {
         controller.initStage(root);
     }
 
+    /**
+     * Verify that the LogOut is correct.
+     */
     @Test
-    public void test1() {
+    public void test1LogOutCorrect() {
         clickOn("#btnLogOut");
         verifyThat("#btnSignUp", isEnabled());
-
     }
 }
