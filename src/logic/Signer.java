@@ -20,73 +20,6 @@ import user.User;
  * @author Martin Angulo
  */
 public class Signer implements Signable{
-    /** Client socket that connects to the servers socket. */
-    private Socket clientSocket = null;
-    /** Input stream to receive objects from the server. */
-    private ObjectInputStream serverInput = null;
-    /** Output stream to send objects to the server. */
-    private ObjectOutputStream clientOutput = null;
-    
-    /**
-     * Signer constructor, connects to the server and initializes IO.
-     * @throws exceptions.UnexpectedErrorException
-     */
-    public Signer() throws UnexpectedErrorException {
-        try {
-            //Getting the client-server communication properties.
-            ResourceBundle configFile = ResourceBundle.getBundle("configuration.config");
-            Integer port = Integer.valueOf(configFile.getString("Port"));
-            String serverHost = configFile.getString("ServerHost");
-            //Initializing the client-server communication.
-            clientSocket = new Socket(serverHost, port);
-            serverInput = new ObjectInputStream(clientSocket.getInputStream());
-            clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer started successfully.");
-        } catch (IOException ex) {
-            throw new UnexpectedErrorException(ex.getMessage());
-        }
-    }
-
-    /**
-     * Helper method to send messages to the server and receive responses.
-     * @param message Message to send. 
-     * @return Server response.
-     */
-    private Message sendMessage(Message message) throws UnexpectedErrorException {
-        Message serverResponse = null;
-        try {
-            //Send message to server
-            clientOutput.writeObject(message);
-            clientOutput.flush();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Message sent to the server.");
-            //Receive response
-            serverResponse = (Message)serverInput.readObject();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Server response recieved.");
-        } catch (ClassNotFoundException | IOException ex) {
-            throw new UnexpectedErrorException(ex.getMessage());
-        }finally{
-            disconnect();
-        }
-        return serverResponse;
-    }
-    
-    /**
-     * Helper method to disconnect the IO and Socket from the server.
-     */
-    private void disconnect() {
-        try {
-            if(clientOutput != null)
-                clientOutput.close();
-            if(serverInput != null)
-                serverInput.close();
-            if (clientSocket != null)
-                clientSocket.close();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer disconnected.");
-        } catch(IOException ie) {
-            System.out.println("Socket Close Error: " + ie.getMessage());
-        }
-    }
-    
     /**
      * Sign up function implementation.
      * @param user User to sign up.
@@ -97,7 +30,14 @@ public class Signer implements Signable{
      */
     @Override
     public synchronized User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
-        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
+        ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_UP, user));
+        worker.start();
+        try {
+            worker.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "", ex);
+        }
+        Message serverResponse = worker.getMessage();
         switch(serverResponse.getType()) {
         case SIGN_UP:
             User signUpUser = (User)serverResponse.getData();
@@ -122,7 +62,14 @@ public class Signer implements Signable{
      */
     @Override
     public synchronized User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
-        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
+        ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_IN, user));
+        worker.start();
+        try {
+            worker.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "InterruptedException: {0}", ex.getMessage());
+        }
+        Message serverResponse = worker.getMessage();
         switch(serverResponse.getType()) {
         case SIGN_IN:
             User logInUser = (User)serverResponse.getData();
