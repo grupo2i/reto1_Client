@@ -74,7 +74,7 @@ public class LogOutController {
     public void initStage(Parent root){
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Log In");
+        stage.setTitle("Log Out");
         stage.setResizable(false);
         btnLogOut.setTooltip(
                 new Tooltip("Click to log out "));

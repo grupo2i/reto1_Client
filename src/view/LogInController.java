@@ -71,7 +71,6 @@ public class LogInController {
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
-            user.setLastAccess(Date.valueOf(LocalDate.now()));
             SignableFactory.getSignable().signIn(user);
             switchToLogOutWindow();
         } catch(UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e){

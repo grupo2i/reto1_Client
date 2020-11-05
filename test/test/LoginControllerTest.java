@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test;
 
 import application.ClientApplication;
@@ -10,6 +5,7 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
@@ -52,6 +48,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the login view.
      */
     @Test
+    @Ignore
     public void test1_InitialState() {
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#pwdPassword", isEnabled());
@@ -63,6 +60,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test2_TxtUsuarioMaximumLength() {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
@@ -71,6 +69,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test3_PwdPasswordMaximumLength() {
         doubleClickOn("#pwdPassword");
         write(OVERSIZED_TEXT);
@@ -79,6 +78,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test4_TxtUsuarioNotEmpty() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
@@ -88,6 +88,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test5_TxtUsuarioIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
@@ -97,6 +98,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test6_PwdPasswordMinimumLength() {
         doubleClickOn("#pwdPassword");
         write("123");
@@ -105,6 +107,7 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
+    @Ignore
     public void test7_PwdPasswordIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
