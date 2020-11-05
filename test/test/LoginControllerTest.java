@@ -17,7 +17,7 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
  * Testing class for Login view and controller. Tests login view behavior using
  * TestFX framework.
  *
- * @author Lorena
+ * @author Lorena Fernandez
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LoginControllerTest extends ApplicationTest {
