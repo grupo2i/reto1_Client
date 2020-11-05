@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
-
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -18,20 +12,20 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 
-
-
 /**
+ * Controls the logOut window behaviou.
  *
- * @author Ander
+ * @author Ander Vicente
  */
-
 public class LogOutController {
+
     @FXML
     private Stage stage;
     @FXML
     private Button btnLogOut;
     @FXML
-    private Button btnExit; 
+    private Button btnExit;
+
     /**
      * Switches to the Log in window.
      *
@@ -39,17 +33,18 @@ public class LogOutController {
      */
     @FXML
     public void handleButtonLogOut(ActionEvent event) {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
-            Parent root =(Parent)loader.load();
+            Parent root = (Parent) loader.load();
             LogInController controller = (loader.getController());
             controller.setStage(stage);
-            controller.initStage(root); 
-        } catch(IOException e){
+            controller.initStage(root);
+        } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign In window.", ButtonType.OK);
             alert.showAndWait();
-        } 
-    }   
+        }
+    }
+
     /**
      * Closes application.
      *
@@ -58,20 +53,23 @@ public class LogOutController {
     @FXML
     public void handleButtonExit(ActionEvent event) {
         stage.close();
-        
+
     }
+
     public Stage getStage() {
         return stage;
     }
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
     /**
      * Initializes the scene and its components
      *
      * @param root
      */
-    public void initStage(Parent root){
+    public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Log Out");
@@ -83,5 +81,5 @@ public class LogOutController {
         btnLogOut.setDefaultButton(true);
         stage.show();
     }
- 
+
 }

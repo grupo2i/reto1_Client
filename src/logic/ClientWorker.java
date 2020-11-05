@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic;
 
 import exceptions.UnexpectedErrorException;
@@ -17,7 +12,7 @@ import message.Message;
 
 /**
  * Handles messages from the server.
- * @author Martin Angulo
+ * @author Martin Angulo, Aitor Fidalgo
  */
 public class ClientWorker extends Thread {
     /** Client socket that connects to the servers socket. */
@@ -99,7 +94,9 @@ public class ClientWorker extends Thread {
     public void run() {
         message = sendMessage(message);
     }
-    
+    /**
+     * @return The message.
+     */
     public Message getMessage() {
         return message;
     }

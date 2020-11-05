@@ -4,12 +4,12 @@ import exceptions.UnexpectedErrorException;
 
 
 /**
- *
- * @author aitor
+ * Returns Signable implementations.
+ * @author Aitor Fidalgo
  */
 public class SignableFactory {
     /**
-     * Return an static Signable for client/server communication.
+     * Return a Signable implementation for client/server communication.
      * @return The Signable to use.
      * @throws exceptions.UnexpectedErrorException
      */

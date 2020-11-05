@@ -5,11 +5,6 @@ import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
 import exceptions.UserNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.Message;
@@ -17,7 +12,7 @@ import user.User;
 
 /**
  * Handles messages from the server.
- * @author Martin Angulo
+ * @author Martin Angulo, Aitor Fidalgo
  */
 public class Signer implements Signable{
     /**
@@ -29,7 +24,7 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public synchronized User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
+    public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
         ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_UP, user));
         worker.start();
         try {
@@ -61,7 +56,7 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public synchronized User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
+    public User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
         ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_IN, user));
         worker.start();
         try {

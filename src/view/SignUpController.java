@@ -26,9 +26,9 @@ import logic.SignableFactory;
 import user.User;
 
 /**
- * Class that controls the SignUpWindow behaviour.
+ * Controls the SignUpWindow behaviour.
  *
- * @author aitor
+ * @author Aitor Fidalgo
  */
 public class SignUpController {
 

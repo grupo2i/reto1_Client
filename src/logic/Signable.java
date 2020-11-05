@@ -8,8 +8,8 @@ import exceptions.UserNotFoundException;
 import user.User;
 
 /**
- * 
- * @author aitor
+ * Signable interface.
+ * @author Martin Angulo
  */
 public interface Signable {
 
