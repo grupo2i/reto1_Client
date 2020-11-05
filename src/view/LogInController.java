@@ -24,7 +24,6 @@ import logic.SignableFactory;
 import user.User;
 
 
-
 /**
  *
  * @author Ander
@@ -46,10 +45,11 @@ public class LogInController {
     @FXML
     private Label lblErrorLogin;
     @FXML
-    private Label lblErrorPassword;     
+    private Label lblErrorPassword;  
+    
+    
     /**
      * Switches to the SignUp window.
-     *
      * @param event
      */
     @FXML
@@ -104,7 +104,6 @@ public class LogInController {
     }
     /**
      * Initializes the scene and its components
-     *
      * @param root
      */
     public void initStage(Parent root){
@@ -131,7 +130,6 @@ public class LogInController {
      */
     private void textChangedPassword(Observable obs){
         Integer pwdLenght = pwdPassword.getText().trim().length();
-        //if pwd =0 or <255= error
         if(pwdLenght<6 || pwdLenght>255){
             errorPassword=true;
             lblErrorPassword.setVisible(true);
