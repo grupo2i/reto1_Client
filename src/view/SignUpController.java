@@ -5,6 +5,8 @@ import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -36,7 +38,7 @@ public class SignUpController {
     private Stage stage;
 
     @FXML
-    private Button btnLogin;
+    private Button btnCancel;
     @FXML
     private Button btnAccept;
 
@@ -67,7 +69,7 @@ public class SignUpController {
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
 
     /**
-     * Initializes the scene and its components
+     * Initializes the stage.
      *
      * @param root
      */
@@ -79,28 +81,13 @@ public class SignUpController {
         stage.setOnShowing(this::handleWindowShowing);
 
         txtUsername.textProperty().addListener(this::handleTextChangeUsername);
-        textFieldErrors.put("txtUsernameError", true);
         txtEmail.textProperty().addListener(this::handleTextChangeEmail);
-        textFieldErrors.put("txtEmailError", true);
         txtName.textProperty().addListener(this::handleTextChangeName);
-        textFieldErrors.put("txtNameError", true);
         pwdPassword.textProperty().addListener(this::handleTextChangePassword);
-        textFieldErrors.put("pwdPasswordError", true);
         pwdConfirmPassword.textProperty().addListener(this::handleTextChangeConfirmPassword);
-        textFieldErrors.put("pwdConfirmPasswordError", true);
-
-        lblErrorConfirmPassword.setVisible(false);
-        lblErrorEmail.setVisible(false);
-        lblErrorName.setVisible(false);
-        lblErrorUsername.setVisible(false);
-        lblErrorPassword.setVisible(false);
-
-        btnAccept.setDisable(true);
-        btnAccept.setTooltip(
-                new Tooltip("Pulse para validar credenciales"));
-        btnAccept.setDefaultButton(true);
-
+        
         stage.show();
+        Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Switched to Sign Up window.");
     }
 
     /**
@@ -109,15 +96,26 @@ public class SignUpController {
      * @param event
      */
     private void handleWindowShowing(WindowEvent event) {
-        btnAccept.setDisable(true);
-
         txtUsername.requestFocus();
 
+        btnAccept.setDisable(true);
+        btnAccept.setTooltip(
+                new Tooltip("Pulse para validar credenciales"));
+        btnAccept.setDefaultButton(true);
+        
+        //Used to show input error messages.
         lblErrorConfirmPassword.setVisible(false);
         lblErrorEmail.setVisible(false);
         lblErrorName.setVisible(false);
         lblErrorPassword.setVisible(false);
         lblErrorUsername.setVisible(false);
+        
+        //Used to control input errors.
+        textFieldErrors.put("txtUsernameError", true);
+        textFieldErrors.put("txtEmailError", true);
+        textFieldErrors.put("txtNameError", true);
+        textFieldErrors.put("pwdPasswordError", true);
+        textFieldErrors.put("pwdConfirmPasswordError", true);
     }
 
     /**
@@ -126,8 +124,9 @@ public class SignUpController {
      * @param event
      */
     @FXML
-    public void handleButtonLogIn(ActionEvent event) {
+    public void handleButtonCancel(ActionEvent event) {
         try {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Cancel button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
             Parent root = (Parent) loader.load();
 
@@ -137,6 +136,7 @@ public class SignUpController {
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
             alert.showAndWait();
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Could not change to Log In window.");
         }
 
     }
@@ -144,6 +144,7 @@ public class SignUpController {
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         try{
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Accept button pressed.");
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setEmail(txtEmail.getText());
@@ -154,6 +155,7 @@ public class SignUpController {
         } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -167,6 +169,7 @@ public class SignUpController {
         } catch(IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Could not change to Sign Up window.");
         } 
     }
 

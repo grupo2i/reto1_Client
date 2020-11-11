@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
     <children>
       <ImageView fitHeight="528.0" fitWidth="782.0" layoutX="-48.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -82,7 +82,7 @@
          <font>
             <Font size="15.0" />
          </font></Label>
-        <Button fx:id="btnLogin" layoutX="450.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleButtonLogIn" prefHeight="35.0" prefWidth="80.0" text="Login" />
-        <Button fx:id="btnAccept" defaultButton="true" layoutX="538.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleButtonAccept" prefHeight="35.0" prefWidth="80.0" text="Accept" />
+        <Button fx:id="btnCancel" layoutX="529.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleButtonCancel" prefHeight="35.0" prefWidth="80.0" text="Cancel" />
+        <Button fx:id="btnAccept" defaultButton="true" layoutX="435.0" layoutY="416.0" mnemonicParsing="false" onAction="#handleButtonAccept" prefHeight="35.0" prefWidth="80.0" text="Accept" />
     </children>
 </Pane>
