@@ -246,7 +246,7 @@ public class SignUpController {
      */
     private void handleTextChangeName(Observable obs) {
         Integer txtNameLength = txtName.getText().trim().length();
-        Pattern patternName = Pattern.compile("^([A-Za-z]+[ ]?)+$");
+        Pattern patternName = Pattern.compile("^([A-Za-záéíóúÁÉÍÓÚ]+[ ]?)+$");
         Matcher matcherName = patternName.matcher(txtName.getText());
 
         //If there is any error...
