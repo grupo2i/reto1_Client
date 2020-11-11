@@ -1,5 +1,6 @@
 package view;
 
+import application.ClientApplication;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
@@ -77,7 +78,11 @@ public class SignUpController {
         stage.setTitle("Sign Up");
         stage.setResizable(false);
         stage.setOnShowing(this::handleWindowShowing);
-
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            if(stage.getScene() == scene)
+                handleWindowCloseRequest(event);
+        });
+        
         txtUsername.textProperty().addListener(this::handleTextChangeUsername);
         textFieldErrors.put("txtUsernameError", true);
         txtEmail.textProperty().addListener(this::handleTextChangeEmail);
@@ -103,6 +108,25 @@ public class SignUpController {
         stage.show();
     }
 
+     /**
+     * Handles the CloseRequest event of the stage.
+     *
+     * @param event
+     */
+    private void handleWindowCloseRequest(WindowEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            LogInController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+            event.consume();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+    
     /**
      * Handles the OnShowing event of the stage.
      *
@@ -227,7 +251,7 @@ public class SignUpController {
             //Sets the error message when the field is longer than 255 characters.
             else if (txtEmailLength > 255) lblErrorEmail.setText("* Must be less than 255 characters");
             //Sets the error message when the field does not match the pattern.
-            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.com");
+            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.comAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             
             textFieldErrors.put("txtEmailError", true);
             lblErrorEmail.setVisible(true);
