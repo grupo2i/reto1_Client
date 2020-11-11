@@ -251,7 +251,7 @@ public class SignUpController {
             //Sets the error message when the field is longer than 255 characters.
             else if (txtEmailLength > 255) lblErrorEmail.setText("* Must be less than 255 characters");
             //Sets the error message when the field does not match the pattern.
-            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.comAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.com");
             
             textFieldErrors.put("txtEmailError", true);
             lblErrorEmail.setVisible(true);
