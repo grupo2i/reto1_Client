@@ -88,8 +88,8 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#pwdConfirmPassword", isEnabled());
         verifyThat("#lblErrorConfirmPassword", isInvisible());
         //Buttons
-        verifyThat("#btnLogin", isVisible());
-        verifyThat("#btnLogin", isEnabled());
+        verifyThat("#btnCancel", isVisible());
+        verifyThat("#btnCancel", isEnabled());
         verifyThat("#btnAccept", isVisible());
         verifyThat("#btnAccept", isDisabled());
     }
@@ -198,7 +198,7 @@ public class SignUpControllerTest extends ApplicationTest {
     @Test
     @Ignore
     public void testG_changeLogInWindow() {
-        clickOn("#btnLogin");
+        clickOn("#btnCancel");
         verifyThat(window("Log In"), WindowMatchers.isShowing());
     }
     
