@@ -12,6 +12,7 @@ import org.junit.runners.MethodSorters;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
 import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
@@ -139,6 +140,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * than MAX_TEXT_LENGTH and that the accept button is disabled.
      */
     @Test
+    @Ignore
     public void testD_maxLengthText() {
         String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
@@ -215,7 +217,8 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtEmail");
         write("A");
         clickOn("#btnAccept");
-        verifyThat("#alert", anything());
+        //verifyThat("#alert", anything());
+        verifyThat("Username 'username' is already registered.", NodeMatchers.isVisible());
         clickOn("OK");
     }
     
@@ -231,5 +234,16 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#btnAccept");
         verifyThat("#alert", anything());
         clickOn("OK");
+    }
+    
+    /**
+     * Tests that name allows letters with accents.
+     */
+    @Test
+    public void testK_accentsInName() {
+        testB_fillAllData();
+        clickOn("#txtName");
+        write("áéíóúÁÉÍÓÚ");
+        verifyThat("#btnAccept", isEnabled());
     }
 }
