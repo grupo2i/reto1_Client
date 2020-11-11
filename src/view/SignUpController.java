@@ -66,6 +66,8 @@ public class SignUpController {
     //Used to handle textField input errors.
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
 
+    String errorString = "";
+    
     /**
      * Initializes the scene and its components
      *
@@ -95,7 +97,7 @@ public class SignUpController {
         lblErrorUsername.setVisible(false);
         lblErrorPassword.setVisible(false);
 
-        btnAccept.setDisable(true);
+        //btnAccept.setDisable(true);
         btnAccept.setTooltip(
                 new Tooltip("Pulse para validar credenciales"));
         btnAccept.setDefaultButton(true);
@@ -143,17 +145,35 @@ public class SignUpController {
 
     @FXML
     public void handleButtonAccept(ActionEvent event) {
-        try{
-            User user = new User();
-            user.setLogin(txtUsername.getText());
-            user.setEmail(txtEmail.getText());
-            user.setFullName(txtName.getText());
-            user.setPassword(pwdPassword.getText());
-            user = SignableFactory.getSignable().signUp(user);
-            switchToLogOutWindow();
-        } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
-            alert.showAndWait();
+        if(textFieldErrors.containsValue(true)) {
+            //Add error strings
+            if(textFieldErrors.get("txtUsernameError"))
+                errorString += "Username" + lblErrorUsername.getText() + "\n";
+            if (textFieldErrors.get("txtNameError")) 
+                errorString += "Name" + lblErrorName.getText() + "\n";
+            if (textFieldErrors.get("txtEmailError")) 
+                errorString += "Email" + lblErrorEmail.getText() + "\n";
+            if (textFieldErrors.get("pwdPasswordError")) 
+                errorString += "Password" + lblErrorPassword.getText() + "\n";
+            if (textFieldErrors.get("pwdConfirmPasswordError")) 
+                errorString += "Confirm password" + lblErrorConfirmPassword.getText() + "\n";
+            
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, errorString, ButtonType.OK);
+            errorAlert.showAndWait();
+            errorString = "";
+        } else {
+            try{
+                User user = new User();
+                user.setLogin(txtUsername.getText());
+                user.setEmail(txtEmail.getText());
+                user.setFullName(txtName.getText());
+                user.setPassword(pwdPassword.getText());
+                user = SignableFactory.getSignable().signUp(user);
+                switchToLogOutWindow();
+            } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+                alert.showAndWait();
+            }
         }
     }
 
@@ -200,6 +220,7 @@ public class SignUpController {
      */
     private void testInputErrors() {
         //Checks if there is any input errors... 
+        /*
         if (textFieldErrors.get("txtUsernameError") || textFieldErrors.get("txtEmailError")
                 || textFieldErrors.get("txtNameError") || textFieldErrors.get("pwdPasswordError")
                 || textFieldErrors.get("pwdConfirmPasswordError")) {
@@ -207,7 +228,13 @@ public class SignUpController {
             btnAccept.setDisable(true);
         } else {
             btnAccept.setDisable(false);
-        }
+        }*/
+        lblErrorUsername.setVisible(false);
+        lblErrorName.setVisible(false);
+        lblErrorEmail.setVisible(false);
+        lblErrorPassword.setVisible(false);
+        lblErrorConfirmPassword.setVisible(false);
+        //btnAccept.setDisable(false);
     }
 
     /**

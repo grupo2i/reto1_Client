@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
@@ -45,7 +46,6 @@ public class LoginControllerTest extends ApplicationTest {
     /**
      * Test the login view.
      */
-    @Test
     public void test1_InitialState() {
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#pwdPassword", isEnabled());

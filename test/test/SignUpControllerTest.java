@@ -139,7 +139,6 @@ public class SignUpControllerTest extends ApplicationTest {
      * than MAX_TEXT_LENGTH and that the accept button is disabled.
      */
     @Test
-    @Ignore
     public void testD_maxLengthText() {
         String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
