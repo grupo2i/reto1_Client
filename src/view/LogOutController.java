@@ -56,7 +56,6 @@ public class LogOutController {
      *
      * @param event
      */
-    
     @FXML
     public void handleButtonExit(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -72,14 +71,29 @@ public class LogOutController {
         }
     }
 
+    /**
+     * Get the acctual Stage
+     *
+     * @return the stage
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Set the acctual Stage
+     *
+     * @param stage
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Get the User
+     *
+     * @param user
+     */
     public void getUser(User user) {
         this.user = user;
     }
