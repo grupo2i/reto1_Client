@@ -225,7 +225,7 @@ public class SignUpControllerTest extends ApplicationTest {
         write("A");
         clickOn("#btnAccept");
         verifyThat("#alert", anything());
-        clickOn("OK");
+        clickOn("Aceptar");
     }
     
     /**
@@ -240,7 +240,7 @@ public class SignUpControllerTest extends ApplicationTest {
         write("A");
         clickOn("#btnAccept");
         verifyThat("#alert", anything());
-        clickOn("OK");
+        clickOn("Aceptar");
     }
     
     @Test
