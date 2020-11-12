@@ -105,14 +105,24 @@ public class LogInController {
             alert.showAndWait();
         }
     }
-
+    /**
+     * set True in the errors
+    */
     boolean errorUsername = true;
     boolean errorPassword = true;
 
+    /**
+     * Get the acctual Stage
+     * @return the stage
+    */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Set the Stage
+     * @param stage
+    */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
