@@ -1,6 +1,8 @@
 package view;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,12 +36,14 @@ public class LogOutController {
     @FXML
     public void handleButtonLogOut(ActionEvent event) {
         try {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Log out button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
             Parent root = (Parent) loader.load();
             LogInController controller = (loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, "Error changing to sign in window: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign In window.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -52,8 +56,8 @@ public class LogOutController {
      */
     @FXML
     public void handleButtonExit(ActionEvent event) {
+        Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Exit button pressed.");
         stage.close();
-
     }
 
     public Stage getStage() {
@@ -80,6 +84,7 @@ public class LogOutController {
                 new Tooltip("Click to close application"));
         btnLogOut.setDefaultButton(true);
         stage.show();
+        Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Log out initialized.");
     }
 
 }

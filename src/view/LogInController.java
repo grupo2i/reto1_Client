@@ -4,6 +4,8 @@ import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,12 +55,14 @@ public class LogInController {
     @FXML
     public void handleButtonSignUp(ActionEvent event) {
         try {
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Sign up button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController controller = (loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Sign up button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -72,12 +76,14 @@ public class LogInController {
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         try {
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Accept button pressed.");
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
             SignableFactory.getSignable().signIn(user);
             switchToLogOutWindow();
         } catch (UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e) {
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Accept button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
@@ -94,6 +100,7 @@ public class LogInController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Switch to log out error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -132,6 +139,7 @@ public class LogInController {
                 new Tooltip("Click to navigate to Sign Up"));
         btnAccept.setDefaultButton(true);
         stage.show();
+        Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Log in initialized.");
     }
 
     /**

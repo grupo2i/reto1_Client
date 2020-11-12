@@ -1,11 +1,12 @@
 package view;
 
-import application.ClientApplication;
 import exceptions.EmailAlreadyExistsException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -29,7 +30,7 @@ import user.User;
 /**
  * Controls the SignUpWindow behaviour.
  *
- * @author Aitor Fidalgo
+ * @author Aitor Fidalgo, Martin Angulo
  */
 public class SignUpController {
 
@@ -64,7 +65,7 @@ public class SignUpController {
     @FXML
     private Label lblErrorName;
 
-    //Used to handle textField input errors.
+    /** Used to handle textField input errors. */
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
 
     /**
@@ -106,9 +107,10 @@ public class SignUpController {
         btnAccept.setDefaultButton(true);
 
         stage.show();
+        Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Sign up initialized.");
     }
 
-     /**
+    /**
      * Handles the CloseRequest event of the stage.
      *
      * @param event
@@ -122,6 +124,7 @@ public class SignUpController {
             controller.initStage(root);
             event.consume();
         } catch (IOException e) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Window close error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -152,6 +155,7 @@ public class SignUpController {
     @FXML
     public void handleButtonLogIn(ActionEvent event) {
         try {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Log in button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
             Parent root = (Parent) loader.load();
 
@@ -159,15 +163,16 @@ public class SignUpController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Log in button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
             alert.showAndWait();
         }
-
     }
 
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         try{
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Accept button pressed.");
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setEmail(txtEmail.getText());
@@ -176,6 +181,7 @@ public class SignUpController {
             user = SignableFactory.getSignable().signUp(user);
             switchToLogOutWindow();
         } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Sign up error: {0}", ex.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
