@@ -4,6 +4,8 @@ import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import logic.SignableFactory;
+import logic.Signer;
 import user.User;
 
 /**
@@ -59,6 +62,8 @@ public class LogInController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            //traza al salir una excepción
+            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "Se ha abierto la ventana", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
         }
@@ -94,6 +99,8 @@ public class LogInController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            //traza al pulsar un botón
+            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "Traza al pulsar el botón", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
             alert.showAndWait();
         }
