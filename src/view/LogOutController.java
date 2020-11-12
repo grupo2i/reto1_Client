@@ -1,6 +1,7 @@
 package view;
 
 import java.io.IOException;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import user.User;
 
 /**
  * Controls the logOut window behaviou.
@@ -25,6 +28,9 @@ public class LogOutController {
     private Button btnLogOut;
     @FXML
     private Button btnExit;
+    @FXML
+    private Label lblGreeting;
+    private User user;
 
     /**
      * Switches to the Log in window.
@@ -50,10 +56,20 @@ public class LogOutController {
      *
      * @param event
      */
+    
     @FXML
     public void handleButtonExit(ActionEvent event) {
-        stage.close();
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setTitle("Confirmación");
+        alert.setContentText("¿Estas seguro de que quieres salir?");
+        Optional<ButtonType> action = alert.showAndWait();
+        if (action.get() == ButtonType.OK) {
+            this.btnExit.setText("Adiós");
+            stage.close();
+        } else {
+            this.btnExit.setText("Cancelamos");
+        }
     }
 
     public Stage getStage() {
@@ -62,6 +78,10 @@ public class LogOutController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void getUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -74,12 +94,14 @@ public class LogOutController {
         stage.setScene(scene);
         stage.setTitle("Log Out");
         stage.setResizable(false);
+        lblGreeting.setText("Hola " + user);
         btnLogOut.setTooltip(
                 new Tooltip("Click to log out "));
         btnExit.setTooltip(
                 new Tooltip("Click to close application"));
         btnLogOut.setDefaultButton(true);
         stage.show();
+
     }
 
 }
