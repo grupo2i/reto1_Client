@@ -1,4 +1,4 @@
-package view;
+    package view;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
