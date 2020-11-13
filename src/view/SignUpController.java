@@ -74,7 +74,7 @@ public class SignUpController {
      * @param root Parent object with signUpWindow loaded in it.
      */
     public void initStage(Parent root) {
-        //Hiding stage so the window showing can be handled.
+        //Hiding stage so the window showing can be handled afterwards.
         stage.hide();
         //Setting stage properties...
         Scene scene = new Scene(root);
