@@ -30,10 +30,9 @@ import user.User;
 /**
  * Controls the SignUpWindow behaviour.
  *
- * @author Aitor Fidalgo
+ * @author Aitor Fidalgo, Martin Angulo
  */
 public class SignUpController {
-
     @FXML
     private Stage stage;
 
@@ -65,7 +64,7 @@ public class SignUpController {
     @FXML
     private Label lblErrorName;
 
-    //Used to handle textField input errors.
+    /** Used to handle textField input errors. */
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
 
     /**
@@ -81,7 +80,14 @@ public class SignUpController {
         stage.setScene(scene);
         stage.setTitle("Sign Up");
         stage.setResizable(false);
+        
+        //Add listeners & setup for error handling
         stage.setOnShowing(this::handleWindowShowing);
+
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            if(stage.getScene() == scene)
+                handleWindowCloseRequest(event);
+        });
 
         //Setting text change listener to the text fields...
         txtUsername.textProperty().addListener(this::handleTextChangeUsername);
@@ -90,15 +96,53 @@ public class SignUpController {
         pwdPassword.textProperty().addListener(this::handleTextChangePassword);
         pwdConfirmPassword.textProperty().addListener(this::handleTextChangeConfirmPassword);
 
+        textFieldErrors.put("pwdConfirmPasswordError", true);
+
+        //Hide error labels
+        lblErrorConfirmPassword.setVisible(false);
+        lblErrorEmail.setVisible(false);
+        lblErrorName.setVisible(false);
+        lblErrorUsername.setVisible(false);
+        lblErrorPassword.setVisible(false);
+
+        //Disable accept button and set its tooltip
+        btnAccept.setDisable(true);
+        btnAccept.setTooltip(
+                new Tooltip("Pulse para validar credenciales"));
+        btnAccept.setDefaultButton(true);
+
         //Showing stage executes handleWindowShowing event.
         stage.show();
         Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Switched to Sign Up window.");
     }
 
     /**
+     * Handles the CloseRequest event of the sign up so that it goes to log in 
+     * instead of closing.
+     *
+     * @param event WindowEvent of type WINDOW_CLOSE_REQUEST
+     */
+    private void handleWindowCloseRequest(WindowEvent event) {
+        try {
+            //Load and switch to log in window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            LogInController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+            //Consume the event so that the window is not actually closed.
+            event.consume();
+        } catch (IOException e) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Window close error: {0}", e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+    
+    /**
      * Handles the OnShowing event of the stage.
      *
-     * @param event Specifies the event that is being handled by the stage.
+     * @param event WindowEvent of type WINDOW_SHOWING
      */
     private void handleWindowShowing(WindowEvent event) {
         //Setting window focus on first text field.
@@ -136,7 +180,7 @@ public class SignUpController {
         try {
             Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Cancel button pressed.");
 
-            //Switching to logInWindow...
+            //Load and switch to log in window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
             Parent root = (Parent) loader.load();
             LogInController controller = (loader.getController());
@@ -144,11 +188,11 @@ public class SignUpController {
             controller.initStage(root);
         } catch (IOException e) {
             //Showing error message on Alert window.
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Log in button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
             alert.showAndWait();
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Could not change to Log In window.");
         }
-
     }
 
     /**
@@ -170,7 +214,6 @@ public class SignUpController {
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
             user.setPassword(pwdPassword.getText());
-
             /*Calling signUp method in Signer to make a sign up request to the server.
               This method will check if the users data is already registered or not.*/
             user = SignableFactory.getSignable().signUp(user);
@@ -178,10 +221,10 @@ public class SignUpController {
             switchToLogOutWindow();
         } catch (UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
             /*Showing error message on Alert window if the username or email
-              are already registered or if an unexpected error occures*/
+              are already registered or if an unexpected error occures*/  
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Sign up error: {0}", ex.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -198,9 +241,9 @@ public class SignUpController {
             controller.initStage(root);
         } catch (IOException e) {
             //Showing error message on Alert window if anything goes wrong.
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Error switching to log out: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Could not change to Sign Up window.");
         }
     }
 
@@ -299,9 +342,7 @@ public class SignUpController {
      */
     private void handleTextChangeName(Observable obs) {
         Integer txtNameLength = txtName.getText().trim().length();
-        //Pattern used to validate the names format.
-        Pattern patternName = Pattern.compile("^([A-Za-z]+[ ]?)+$");
-        //Used to check if the name matches the pattern.
+        Pattern patternName = Pattern.compile("^([A-Za-záéíóúÁÉÍÓÚ]+[ ]?)+$");
         Matcher matcherName = patternName.matcher(txtName.getText());
 
         //If there is any error...

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SignUpController">
     <children>
       <ImageView fitHeight="528.0" fitWidth="782.0" layoutX="-48.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -54,7 +54,7 @@
          <cursor>
             <Cursor fx:constant="TEXT" />
          </cursor></TextField>
-        <Label fx:id="lblErrorEmail" layoutX="300.0" layoutY="186.0" prefHeight="17.0" prefWidth="409.0" text="* Must match the pattern example@example.com" textFill="RED">
+        <Label fx:id="lblErrorEmail" alignment="TOP_LEFT" layoutX="300.0" layoutY="186.0" prefHeight="64.0" prefWidth="331.0" text="* Must match the pattern example@example.com" textFill="RED" wrapText="true">
          <font>
             <Font size="15.0" />
          </font></Label>
