@@ -26,9 +26,9 @@ import logic.SignableFactory;
 import user.User;
 
 /**
- * Controls the SignUpWindow behaviour.
+ * Class that controls the SignUpWindow behaviour.
  *
- * @author Aitor Fidalgo
+ * @author aitor
  */
 public class SignUpController {
 
@@ -141,14 +141,9 @@ public class SignUpController {
 
     }
 
-    /**
-     * Handle when you click on the Accept button
-     * 
-     * @param event
-     */
     @FXML
     public void handleButtonAccept(ActionEvent event) {
-        try {
+        try{
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setEmail(txtEmail.getText());
@@ -156,32 +151,27 @@ public class SignUpController {
             user.setPassword(pwdPassword.getText());
             user = SignableFactory.getSignable().signUp(user);
             switchToLogOutWindow();
-        } catch (UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
+        } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
     }
 
-    /**
-     * Switch to the Log Out window
-     *
-     */
     private void switchToLogOutWindow() {
-        try {
+        try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
-            Parent root = (Parent) loader.load();
+            Parent root =(Parent)loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
-        } catch (IOException e) {
+        } catch(IOException e){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
-        }
+        } 
     }
 
     /**
      * Tests if there is any error on every txtUsername text propertie change.
-     *
      * @param obs
      */
     private void handleTextChangeUsername(Observable obs) {
@@ -190,13 +180,10 @@ public class SignUpController {
         //If there is any error...
         if (txtUsernameLength == 0 || txtUsernameLength > 255) {
             //Sets the error message when the fiel is empty.
-            if (txtUsernameLength == 0) {
-                lblErrorUsername.setText("* Field must not be empty");
-            } //Sets the error message when the field is longer than 255 characters.
-            else if (txtUsernameLength > 255) {
-                lblErrorUsername.setText("* Must be less than 255 characters");
-            }
-
+            if (txtUsernameLength == 0) lblErrorUsername.setText("* Field must not be empty");
+            //Sets the error message when the field is longer than 255 characters.
+            else if (txtUsernameLength > 255) lblErrorUsername.setText("* Must be less than 255 characters");
+            
             textFieldErrors.put("txtUsernameError", true);
             lblErrorUsername.setVisible(true);
         } else {
@@ -225,7 +212,6 @@ public class SignUpController {
 
     /**
      * Tests if there is any error on every txtEmail text propertie change.
-     *
      * @param obs
      */
     private void handleTextChangeEmail(Observable obs) {
@@ -237,16 +223,12 @@ public class SignUpController {
         //If there is any error...
         if (txtEmailLength == 0 || txtEmailLength > 255 || !matcherEmail.matches()) {
             //Sets the error message when the fiel is empty.
-            if (txtEmailLength == 0) {
-                lblErrorEmail.setText("* Field must not be empty");
-            } //Sets the error message when the field is longer than 255 characters.
-            else if (txtEmailLength > 255) {
-                lblErrorEmail.setText("* Must be less than 255 characters");
-            } //Sets the error message when the field does not match the pattern.
-            else if (!matcherEmail.matches()) {
-                lblErrorEmail.setText("* Must match the pattern example@example.com");
-            }
-
+            if (txtEmailLength == 0) lblErrorEmail.setText("* Field must not be empty");
+            //Sets the error message when the field is longer than 255 characters.
+            else if (txtEmailLength > 255) lblErrorEmail.setText("* Must be less than 255 characters");
+            //Sets the error message when the field does not match the pattern.
+            else if (!matcherEmail.matches()) lblErrorEmail.setText("* Must match the pattern example@example.com");
+            
             textFieldErrors.put("txtEmailError", true);
             lblErrorEmail.setVisible(true);
         } else {
@@ -260,7 +242,6 @@ public class SignUpController {
 
     /**
      * Tests if there is any error on every txtName text propertie change.
-     *
      * @param obs
      */
     private void handleTextChangeName(Observable obs) {
@@ -271,16 +252,12 @@ public class SignUpController {
         //If there is any error...
         if (txtNameLength == 0 || txtNameLength > 255 || !matcherName.matches()) {
             //Sets the error message when the fiel is empty.
-            if (txtNameLength == 0) {
-                lblErrorName.setText("* Field must not be empty");
-            } //Sets the error message when the field is longer than 255 characters.
-            else if (txtNameLength > 255) {
-                lblErrorName.setText("* Must be less than 255 characters");
-            } //Sets the error message when the field does not match the pattern.
-            else if (!matcherName.matches()) {
-                lblErrorName.setText("* Must only contain letters");
-            }
-
+            if (txtNameLength == 0) lblErrorName.setText("* Field must not be empty");
+            //Sets the error message when the field is longer than 255 characters.
+            else if (txtNameLength > 255) lblErrorName.setText("* Must be less than 255 characters");
+            //Sets the error message when the field does not match the pattern.
+            else if (!matcherName.matches()) lblErrorName.setText("* Must only contain letters");
+            
             textFieldErrors.put("txtNameError", true);
             lblErrorName.setVisible(true);
         } else {
@@ -294,7 +271,6 @@ public class SignUpController {
 
     /**
      * Tests if there is any error on every pwdPassword text propertie change.
-     *
      * @param obs
      */
     private void handleTextChangePassword(Observable obs) {
@@ -303,20 +279,17 @@ public class SignUpController {
         //If there is any error with pwdPassword...
         if (pwdPasswordLength < 6 || pwdPasswordLength > 255) {
             //Sets the error message when the fiel is shorter than 6 characters.
-            if (pwdPasswordLength < 6) {
-                lblErrorPassword.setText("* Must be at least 6 characters");
-            } //Sets the error message when the field is longer than 255 characters.
-            else if (pwdPasswordLength > 255) {
-                lblErrorPassword.setText("* Must be less than 255 characters");
-            }
-
+            if (pwdPasswordLength < 6) lblErrorPassword.setText("* Must be at least 6 characters");
+            //Sets the error message when the field is longer than 255 characters.
+            else if (pwdPasswordLength > 255) lblErrorPassword.setText("* Must be less than 255 characters");
+            
             textFieldErrors.put("pwdPasswordError", true);
             lblErrorPassword.setVisible(true);
         } else {
             textFieldErrors.put("pwdPasswordError", false);
             lblErrorPassword.setVisible(false);
         }
-
+        
         //If pwdConfirmPassword does not match with pwdPassword...
         if (!pwdConfirmPassword.getText().equals(pwdPassword.getText())) {
             textFieldErrors.put("pwdConfirmPasswordError", true);
@@ -331,9 +304,7 @@ public class SignUpController {
     }
 
     /**
-     * Tests if there is any error on every pwdConfirmPassword text propertie
-     * change.
-     *
+     * Tests if there is any error on every pwdConfirmPassword text propertie change.
      * @param obs
      */
     private void handleTextChangeConfirmPassword(Observable obs) {
@@ -350,20 +321,10 @@ public class SignUpController {
         testInputErrors();
     }
 
-    /**
-     * Get the Stage
-     *
-     * @return the Stage
-     */
     public Stage getStage() {
         return stage;
     }
 
-    /**
-     * Set the Stage
-     *
-     * @param primaryStage
-     */
     public void setStage(Stage primaryStage) {
         stage = primaryStage;
     }
