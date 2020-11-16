@@ -1,19 +1,26 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package logic;
-
-import exceptions.UnexpectedErrorException;
 
 
 /**
- * Returns Signable implementations.
- * @author Aitor Fidalgo
+ *
+ * @author aitor
  */
 public class SignableFactory {
+    /** Static signer for client/server communication. */
+    private static Signer signer;
+    
     /**
-     * Return a Signable implementation for client/server communication.
+     * Return an static Signable for client/server communication.
      * @return The Signable to use.
-     * @throws exceptions.UnexpectedErrorException
      */
-    public static Signable getSignable() throws UnexpectedErrorException{
-        return new Signer();
+    public static Signable getSignable(){
+        if(signer == null)
+            signer = new Signer();
+        return signer;
     }
 }
