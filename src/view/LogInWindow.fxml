@@ -25,7 +25,7 @@
             <Image url="@../images/rectangle.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnSignUp" layoutX="476.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="35.0" prefWidth="80.0" text="Sign Up..." textFill="#1d3557" />
+      <Button fx:id="btnSignUp" layoutX="14" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="35.0" prefWidth="80.0" text="Sign Up" textFill="#1d3557" />
       <Button fx:id="btnAccept" defaultButton="true" layoutX="577.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleButtonAccept" prefHeight="35.0" prefWidth="80.0" text="Accept" textFill="#1d3557" />
       <Label fx:id="lblErrorLogin" layoutX="273.0" layoutY="137.0" prefHeight="26.0" prefWidth="337.0" text="* Error" textFill="#ff0015">
          <font>

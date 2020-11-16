@@ -48,8 +48,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the login view.
      */
     @Test
-    @Ignore
-    public void test1_InitialState() {
+    public void testa_InitialState() {
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#pwdPassword", isEnabled());
         verifyThat("#btnAccept", isDisabled());
@@ -63,8 +62,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User length is less than 255.
      */
     @Test
-    @Ignore
-    public void test2_TxtUsuarioMaximumLength() {
+    public void testb_TxtUsuarioMaximumLength() {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
         verifyThat("#btnAccept", isDisabled());
@@ -76,8 +74,7 @@ public class LoginControllerTest extends ApplicationTest {
      */
 
     @Test
-    @Ignore
-    public void test3_PwdPasswordMaximumLength() {
+    public void testc_PwdPasswordMaximumLength() {
         doubleClickOn("#pwdPassword");
         write(OVERSIZED_TEXT);
         verifyThat("#btnAccept", isDisabled());
@@ -88,8 +85,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User is not empty.
      */
     @Test
-    @Ignore
-    public void test4_TxtUsuarioNotEmpty() {
+    public void testd_TxtUsuarioNotEmpty() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
         verifyThat("#btnAccept", isDisabled());
@@ -102,8 +98,7 @@ public class LoginControllerTest extends ApplicationTest {
      */
 
     @Test
-    @Ignore
-    public void test5_TxtUsuarioIsCorrect() {
+    public void teste_TxtUsuarioIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
         doubleClickOn("#pwdPassword");
@@ -115,8 +110,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the Password length is the minimum.
      */
     @Test
-    @Ignore
-    public void test6_PwdPasswordMinimumLength() {
+    public void testf_PwdPasswordMinimumLength() {
         doubleClickOn("#pwdPassword");
         write("123");
         verifyThat("#btnAccept", isDisabled());
@@ -127,8 +121,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the Password is correct.
      */
     @Test
-    @Ignore
-    public void test7_PwdPasswordIsCorrect() {
+    public void testg_PwdPasswordIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
         doubleClickOn("#pwdPassword");
@@ -140,17 +133,47 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User exist in the database.
      */
     @Test
-    @Ignore
-    public void test8_UserExists() {
+    public void testh_UserExists() {
         clickOn("#txtUsername");
         write("mamaduk");
         clickOn("#pwdPassword");
         write("abcd*1234");
         clickOn("#btnAccept");
     }
-    
+
+    /**
+     * Test if an alert pops up if user does not exist.
+     */
     @Test
-    public void test9_verifyAlertUnexpected() {
+    public void testi_UserDoesNotExist() {
+        clickOn("#txtUsername");
+        write("mamaduka");
+        clickOn("#pwdPassword");
+        write("abcd*1234");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        sleep(2000);
+        verifyThat("User was not found.", isVisible());
+        clickOn("Aceptar");
+    }
+    /**
+     * Test if an alert pops up if password does not match.
+     */
+    @Test
+    public void testj_PasswordDoesNotMatch() {
+        clickOn("#txtUsername");
+        write("mamaduk");
+        clickOn("#pwdPassword");
+        write("abcd*1235");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        sleep(2000);
+        verifyThat("Password does not match.", isVisible());
+        clickOn("Aceptar");
+    }
+  
+    @Test
+    public void testk_verifyAlertUnexpected() {
         clickOn("#txtUsername");
         write("mamaduk");
         clickOn("#pwdPassword");

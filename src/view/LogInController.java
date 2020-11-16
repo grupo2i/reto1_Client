@@ -49,12 +49,14 @@ public class LogInController {
     private Label lblErrorPassword;
 
     /**
-     * Switches to the SignUp window.
+     * Switches to the SignUp window. Loads sign up window, gets its controller
+     * and loads stage.
      *
      * @param event
+     * @throws IOException case it cant switch to sign up window
      */
     @FXML
-    public void handleButtonSignUp(ActionEvent event) {
+    public void handleButtonSignUp(ActionEvent event) throws IOException {
         try {
             Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Sign Up button pressd.");
 
@@ -62,52 +64,78 @@ public class LogInController {
             Parent root = (Parent) loader.load();
             SignUpController controller = (loader.getController());
             controller.setStage(stage);
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Loading Sign up stage...");
+            // Loads Sign Up window.
             controller.initStage(root);
+            // If window switch not succesful, shows alert and notifies the user.
         } catch (IOException e) {
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Sign up button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "IOException: {0}", e.getMessage());
             alert.showAndWait();
         }
     }
 
     /**
-     * Tries to log in, if introduced fields ok enters to app.
+     * Loads log out window, gets its controller and loads stage. If introduced
+     * fields enters log out.
      *
      * @param event
+     * @throws UserNotFoundException case user is not found.
+     * @throws PasswordDoesNotMatchException case password does not match.
+     * @throws UnexpectedErrorException case something unexpected happens.
+     * @throws IOException case it cant switch to log out window.
      */
     @FXML
-    public void handleButtonAccept(ActionEvent event) {
+    public void handleButtonAccept(ActionEvent event) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException, IOException {
         try {
+            // Creates new object user type and assigns username and password introduced by user.
             Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Accept button pressed");
 
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
+            // Validates that username and password exist and match with saved in database.
             SignableFactory.getSignable().signIn(user);
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Loading log out window...");
+            // If data is OK switches to log out.
             switchToLogOutWindow();
-        } catch (UserNotFoundException | PasswordDoesNotMatchException | UnexpectedErrorException e) {
-            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Accept button error: {0}", e.getMessage());
-            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            // If data NOT OK shows alert and notifies the user.
+        } catch (UserNotFoundException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "User was not found.", ButtonType.OK);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());
             alert.showAndWait();
-            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, e.getMessage());
+        } catch (PasswordDoesNotMatchException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Password does not match.", ButtonType.OK);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "PasswordDoesNotMatchException {0}", e.getMessage());
+            alert.showAndWait();
+        } catch (UnexpectedErrorException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Unexpected error.", ButtonType.OK);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "UnexpectedErrorException {0}", e.getMessage());
+            alert.showAndWait();
         }
     }
 
     /**
-     * if introduced data ok switch to log out.
+     * Loads log out view, sets it's controller and inits stage. if introduced
+     * data ok switch to log out.
+     *
+     * @throws IOException case it can't switch to log out window.
      */
-    private void switchToLogOutWindow() {
+    private void switchToLogOutWindow() throws IOException {
         try {
             Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "LogOut button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
             Parent root = (Parent) loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Loading log out stage...");
             controller.initStage(root,txtUsername.getText().toString());
         } catch (IOException e) {
             //traza al pulsar un botón
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Switch to log out error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());
             alert.showAndWait();
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Could not change to Log Out window.");
         }
@@ -119,17 +147,19 @@ public class LogInController {
     boolean errorPassword = true;
 
     /**
-     * Get the acctual Stage
-     * @return the stage
-    */
+     * Gets stage.
+     *
+     * @return stage
+     */
     public Stage getStage() {
         return stage;
     }
 
     /**
-     * Set the Stage
+     * Sets stage.
+     *
      * @param stage
-    */
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -141,6 +171,7 @@ public class LogInController {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
+        Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Initializing stage...");
         stage.setScene(scene);
         stage.setTitle("Log In");
         stage.setResizable(false);
@@ -155,6 +186,7 @@ public class LogInController {
         btnSignUp.setTooltip(
                 new Tooltip("Click to navigate to Sign Up"));
         btnAccept.setDefaultButton(true);
+        Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Showing stage...");
         stage.show();
         Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Switched to Log In window.");
     }
@@ -165,6 +197,7 @@ public class LogInController {
      * @param obs
      */
     private void textChangedPassword(Observable obs) {
+        // Comprobar que la longitud del texto introducido es como mínimo de 6 caracteres y no supera los 255.
         Integer pwdLenght = pwdPassword.getText().trim().length();
         if (pwdLenght < 6 || pwdLenght > 255) {
             errorPassword = true;
