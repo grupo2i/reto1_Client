@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package logic;
 
 import exceptions.EmailAlreadyExistsException;
@@ -5,16 +10,81 @@ import exceptions.PasswordDoesNotMatchException;
 import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
 import exceptions.UserNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import message.Message;
 import user.User;
 
 /**
  * Handles messages from the server.
- * @author Martin Angulo, Aitor Fidalgo
+ * @author Martin Angulo
  */
 public class Signer implements Signable{
+    /** Port to connect to the server. */
+    private static final int PORT = 5005;
+    /** Client socket that connects to the servers socket. */
+    private Socket clientSocket = null;
+    /** Input stream to receive objects from the server. */
+    private ObjectInputStream serverInput = null;
+    /** Output stream to send objects to the server. */
+    private ObjectOutputStream clientOutput = null;
+    
+    /**
+     * Signer constructor, connects to the server and initializes IO.
+     */
+    public Signer() {
+        try {
+            clientSocket = new Socket(InetAddress.getLocalHost(), PORT);
+            serverInput = new ObjectInputStream(clientSocket.getInputStream());
+            clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+        } catch (UnknownHostException ex) {
+            System.out.println("UnknownHostException: " + ex.getMessage());
+        } catch (IOException ie) {
+            System.out.println("IOException: " + ie.getMessage());
+        }
+    }
+
+    /**
+     * Helper method to send messages to the server and receive responses.
+     * @param message Message to send. 
+     * @return Server response.
+     */
+    private Message sendMessage(Message message) {
+        Message serverResponse = null;
+        try {
+            //Send message to server
+            clientOutput.writeObject(message);
+            clientOutput.flush();
+            //Receive response
+            serverResponse = (Message)serverInput.readObject();
+        } catch (IOException ex) {
+            System.out.println("IOException: " + ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException: " + ex.getMessage());
+        }
+        return serverResponse;
+    }
+    
+    /**
+     * Helper method to disconnect the IO and Socket from the server.
+     */
+    private void Disconnet() {
+        try {
+            if(clientOutput != null)
+                clientOutput.close();
+            if(serverInput != null)
+                serverInput.close();
+            if (clientSocket != null)
+                clientSocket.close();
+        } catch(IOException ie) {
+            System.out.println("Socket Close Error: " + ie.getMessage());
+        }
+    }
+    
     /**
      * Sign up function implementation.
      * @param user User to sign up.
@@ -24,15 +94,8 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
-        ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_UP, user));
-        worker.start();
-        try {
-            worker.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "InterruptedException: {0}", ex.getMessage());
-        }
-        Message serverResponse = worker.getMessage();
+    public synchronized User signUp(User user) throws UserAlreadyExistsException, EmailAlreadyExistsException, UnexpectedErrorException {
+        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_UP, user));
         switch(serverResponse.getType()) {
         case SIGN_UP:
             User signUpUser = (User)serverResponse.getData();
@@ -42,7 +105,7 @@ public class Signer implements Signable{
         case EMAIL_ALREADY_EXISTS:
             throw new EmailAlreadyExistsException(user.getEmail());
         default:
-            throw new UnexpectedErrorException("No response recieved from the server.");
+           throw new UnexpectedErrorException();
         }
     }
 
@@ -56,15 +119,8 @@ public class Signer implements Signable{
      * @throws exceptions.UnexpectedErrorException If anything else goes wrong.
      */
     @Override
-    public User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
-        ClientWorker worker = new ClientWorker(new Message(Message.Type.SIGN_IN, user));
-        worker.start();
-        try {
-            worker.join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "InterruptedException: {0}", ex.getMessage());
-        }
-        Message serverResponse = worker.getMessage();
+    public synchronized User signIn(User user) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException{
+        Message serverResponse = sendMessage(new Message(Message.Type.SIGN_IN, user));
         switch(serverResponse.getType()) {
         case SIGN_IN:
             User logInUser = (User)serverResponse.getData();
@@ -74,7 +130,7 @@ public class Signer implements Signable{
         case PASSWORD_DOES_NOT_MATCH:
             throw new PasswordDoesNotMatchException();
         default:
-            throw new UnexpectedErrorException("No response recieved from the server.");
+            throw new UnexpectedErrorException();
         }
     }
 }
