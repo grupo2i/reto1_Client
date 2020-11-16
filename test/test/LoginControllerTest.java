@@ -5,8 +5,10 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isFocused;
@@ -46,6 +48,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the login view.
      */
     @Test
+    @Ignore
     public void test1_InitialState() {
         verifyThat("#txtUsername", isEnabled());
         verifyThat("#pwdPassword", isEnabled());
@@ -60,6 +63,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User length is less than 255.
      */
     @Test
+    @Ignore
     public void test2_TxtUsuarioMaximumLength() {
         doubleClickOn("#txtUsername");
         write(OVERSIZED_TEXT);
@@ -72,6 +76,7 @@ public class LoginControllerTest extends ApplicationTest {
      */
 
     @Test
+    @Ignore
     public void test3_PwdPasswordMaximumLength() {
         doubleClickOn("#pwdPassword");
         write(OVERSIZED_TEXT);
@@ -83,6 +88,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User is not empty.
      */
     @Test
+    @Ignore
     public void test4_TxtUsuarioNotEmpty() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
@@ -96,6 +102,7 @@ public class LoginControllerTest extends ApplicationTest {
      */
 
     @Test
+    @Ignore
     public void test5_TxtUsuarioIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
@@ -108,6 +115,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the Password length is the minimum.
      */
     @Test
+    @Ignore
     public void test6_PwdPasswordMinimumLength() {
         doubleClickOn("#pwdPassword");
         write("123");
@@ -119,6 +127,7 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the Password is correct.
      */
     @Test
+    @Ignore
     public void test7_PwdPasswordIsCorrect() {
         doubleClickOn("#txtUsername");
         write("usuario1234");
@@ -131,11 +140,23 @@ public class LoginControllerTest extends ApplicationTest {
      * Test the User exist in the database.
      */
     @Test
+    @Ignore
     public void test8_UserExists() {
         clickOn("#txtUsername");
         write("mamaduk");
         clickOn("#pwdPassword");
         write("abcd*1234");
         clickOn("#btnAccept");
+    }
+    
+    @Test
+    public void test9_verifyAlertUnexpected() {
+        clickOn("#txtUsername");
+        write("mamaduk");
+        clickOn("#pwdPassword");
+        write("abcd*1234");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        verifyThat("An unexpected error occured, please try later.", isVisible());
     }
 }

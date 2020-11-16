@@ -40,8 +40,9 @@ public class ClientWorker extends Thread {
             clientSocket = new Socket(serverHost, port);
             serverInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer started successfully.");
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.INFO, "Client worker started successfully.");
         } catch (IOException ex) {
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, "ClientWorker constructor: {0}", ex.getMessage());
             throw new UnexpectedErrorException(ex.getMessage());
         }
     }
@@ -58,9 +59,9 @@ public class ClientWorker extends Thread {
                 serverInput.close();
             if (clientSocket != null)
                 clientSocket.close();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Client signer disconnected.");
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.INFO, "Client signer disconnected.");
         } catch(IOException ie) {
-            System.out.println("Socket Close Error: " + ie.getMessage());
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, "Socket close error: {0}", ie.getMessage());
         }
     }
     
@@ -75,11 +76,12 @@ public class ClientWorker extends Thread {
             //Send message to server
             clientOutput.writeObject(message);
             clientOutput.flush();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Message sent to the server.");
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.INFO, "Message sent to the server.");
             //Receive response
             serverResponse = (Message)serverInput.readObject();
-            Logger.getLogger(Signer.class.getName()).log(Level.INFO, "Server response recieved.");
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.INFO, "Server response recieved.");
         } catch (ClassNotFoundException | IOException ex) {
+            Logger.getLogger(ClientWorker.class.getName()).log(Level.SEVERE, "Error sending message: {0}", ex.getMessage());
             serverResponse = new Message(Message.Type.UNEXPECTED_ERROR, null);
         }finally{
             disconnect();

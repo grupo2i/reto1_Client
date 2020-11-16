@@ -12,6 +12,7 @@ import org.junit.runners.MethodSorters;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.base.NodeMatchers;
 import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
@@ -59,6 +60,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests the initial stage of the window.
      */
     @Test
+    @Ignore
     public void testA_initialState(){
         //Texts
         verifyThat("#txtUsername", hasText(""));
@@ -87,8 +89,8 @@ public class SignUpControllerTest extends ApplicationTest {
         verifyThat("#pwdConfirmPassword", isEnabled());
         verifyThat("#lblErrorConfirmPassword", isInvisible());
         //Buttons
-        verifyThat("#btnLogin", isVisible());
-        verifyThat("#btnLogin", isEnabled());
+        verifyThat("#btnCancel", isVisible());
+        verifyThat("#btnCancel", isEnabled());
         verifyThat("#btnAccept", isVisible());
         verifyThat("#btnAccept", isDisabled());
     }
@@ -97,6 +99,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests the window when all data is set correctly.
      */
     @Test
+    @Ignore
     public void testB_fillAllData(){
         clickOn("#txtUsername");
         write("username");
@@ -119,6 +122,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the accept button is disabled when all text fields are empty.
      */
     @Test
+    @Ignore
     public void testC_emptyTexts() {
         clickOn("#txtUsername");
         write("");
@@ -139,6 +143,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * than MAX_TEXT_LENGTH and that the accept button is disabled.
      */
     @Test
+    @Ignore
     public void testD_maxLengthText() {
         String maxLengthError = "* Must be less than 255 characters";
         clickOn("#txtUsername");
@@ -165,6 +170,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the error message is shown when the password is too short .
      */
     @Test
+    @Ignore
     public void testE_shortPassword() {
         clickOn("#pwdPassword");
         write("12345");
@@ -177,6 +183,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * are incorrect.
      */
     @Test
+    @Ignore
     public void testF_userAndEmailFormats() {
         clickOn("#txtName");
         write("12345");
@@ -190,8 +197,9 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the window changes when the login button is clicked.
      */
     @Test
+    @Ignore
     public void testG_changeLogInWindow() {
-        clickOn("#btnLogin");
+        clickOn("#btnCancel");
         verifyThat(window("Log In"), WindowMatchers.isShowing());
     }
     
@@ -199,6 +207,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the window changes when the accept button is clicked.
      */
     @Test
+    @Ignore
     public void testH_changeLogOutWindow() {
         testB_fillAllData();
         clickOn("#btnAccept");
@@ -209,13 +218,15 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the alert shows when the user already exists.
      */
     @Test
+    @Ignore
     public void testI_verifyAlertUsername() {
         //User exists
         testB_fillAllData();
         clickOn("#txtEmail");
         write("A");
         clickOn("#btnAccept");
-        verifyThat("#alert", anything());
+        //verifyThat("#alert", anything());
+        verifyThat("Username 'username' is already registered.", NodeMatchers.isVisible());
         clickOn("OK");
     }
     
@@ -223,6 +234,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Tests that the alert shows when the email already exists.
      */
     @Test
+    @Ignore
     public void testJ_verifyAlertEmail() {
         //Email exists
         testB_fillAllData();
@@ -230,6 +242,25 @@ public class SignUpControllerTest extends ApplicationTest {
         write("A");
         clickOn("#btnAccept");
         verifyThat("#alert", anything());
-        clickOn("OK");
+        clickOn("Aceptar");
+    }
+    
+    @Test
+    public void testK_verifyAlertUnexpected() {
+        testB_fillAllData();
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        verifyThat("An unexpected error occured, please try later.", isVisible());
+    }
+    
+    /**
+     * Tests that name allows letters with accents.
+     */
+    @Test
+    public void testK_accentsInName() {
+        testB_fillAllData();
+        clickOn("#txtName");
+        write("áéíóúÁÉÍÓÚ");
+        verifyThat("#btnAccept", isEnabled());
     }
 }

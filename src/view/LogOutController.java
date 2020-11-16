@@ -2,6 +2,8 @@ package view;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,15 +53,23 @@ public class LogOutController {
             } else {
                 this.btnExit.setText("Adiós");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
-                Parent root = (Parent) loader.load();
+                Parentroot = (Parent) loader.load();
                 LogInController controller = (loader.getController());
                 controller.setStage(stage);
                 controller.initStage(root);
-            }
+            } 
+            Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Log Out button pressed.");
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            LogInController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, "Error changing to sign in window: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign In window.", ButtonType.OK);
             alert.showAndWait();
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, "Could not change to Sign In window.");
         }
     }
 
@@ -81,6 +91,8 @@ public class LogOutController {
             this.btnExit.setText("Adiós");
             stage.close();
         }
+        Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Exit button pressed.");
+        stage.close();
     }
 
     /**
@@ -129,16 +141,6 @@ public class LogOutController {
                 new Tooltip("Click to close application"));
         btnLogOut.setDefaultButton(true);
         stage.show();
-
-    }
-
-    /**
-     * Initializates the Stage
-     *
-     * @param root
-     */
-    void initStage(Parent root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -158,6 +160,6 @@ public class LogOutController {
             this.btnExit.setText("Adiós");
             stage.close();
         }
+        Logger.getLogger(LogOutController.class.getName()).log(Level.INFO, "Switched to Log Out window.");
     }
-
 }
