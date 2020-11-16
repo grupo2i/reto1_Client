@@ -63,9 +63,10 @@ public class LogInController {
             controller.initStage(root);
         } catch (IOException e) {
             //traza al salir una excepción
-            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "Se ha abierto la ventana", e.getMessage());
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Se ha abierto la ventana", e);
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
+  
         }
     }
 
@@ -97,10 +98,10 @@ public class LogInController {
             Parent root = (Parent) loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
-            controller.initStage(root);
+            controller.initStage(root,txtUsername.getText().toString());
         } catch (IOException e) {
             //traza al pulsar un botón
-            Logger.getLogger(Signer.class.getName()).log(Level.SEVERE, "Traza al pulsar el botón", e.getMessage());
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Traza al pulsar el botón", e);
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
             alert.showAndWait();
         }
