@@ -5,6 +5,8 @@ import exceptions.UnexpectedErrorException;
 import exceptions.UserAlreadyExistsException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -28,10 +30,9 @@ import user.User;
 /**
  * Controls the SignUpWindow behaviour.
  *
- * @author Aitor Fidalgo
+ * @author Aitor Fidalgo, Martin Angulo
  */
 public class SignUpController {
-
     @FXML
     private Stage stage;
 
@@ -63,21 +64,26 @@ public class SignUpController {
     @FXML
     private Label lblErrorName;
 
-    //Used to handle textField input errors.
+    /** Used to handle textField input errors. */
     HashMap<String, Boolean> textFieldErrors = new HashMap<>();
 
     /**
      * Initializes the scene and its components
      *
-     * @param root
+     * @param root Base node of the scene graph
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Sign Up");
         stage.setResizable(false);
+        
+        //Add listeners & setup for error handling
         stage.setOnShowing(this::handleWindowShowing);
-
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            if(stage.getScene() == scene)
+                handleWindowCloseRequest(event);
+        });
         txtUsername.textProperty().addListener(this::handleTextChangeUsername);
         textFieldErrors.put("txtUsernameError", true);
         txtEmail.textProperty().addListener(this::handleTextChangeEmail);
@@ -89,24 +95,50 @@ public class SignUpController {
         pwdConfirmPassword.textProperty().addListener(this::handleTextChangeConfirmPassword);
         textFieldErrors.put("pwdConfirmPasswordError", true);
 
+        //Hide error labels
         lblErrorConfirmPassword.setVisible(false);
         lblErrorEmail.setVisible(false);
         lblErrorName.setVisible(false);
         lblErrorUsername.setVisible(false);
         lblErrorPassword.setVisible(false);
 
+        //Disable accept button and set its tooltip
         btnAccept.setDisable(true);
         btnAccept.setTooltip(
                 new Tooltip("Pulse para validar credenciales"));
         btnAccept.setDefaultButton(true);
 
         stage.show();
+        Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Sign up initialized.");
     }
 
     /**
+     * Handles the CloseRequest event of the sign up so that it goes to log in 
+     * instead of closing.
+     *
+     * @param event WindowEvent of type WINDOW_CLOSE_REQUEST
+     */
+    private void handleWindowCloseRequest(WindowEvent event) {
+        try {
+            //Load and switch to log in window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            LogInController controller = (loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+            //Consume the event so that the window is not actually closed.
+            event.consume();
+        } catch (IOException e) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Window close error: {0}", e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+    
+    /**
      * Handles the OnShowing event of the stage.
      *
-     * @param event
+     * @param event WindowEvent of type WINDOW_SHOWING
      */
     private void handleWindowShowing(WindowEvent event) {
         btnAccept.setDisable(true);
@@ -123,55 +155,71 @@ public class SignUpController {
     /**
      * Switches to the LogIn window.
      *
-     * @param event
+     * @param event ActionEvent that triggered the button.
      */
     @FXML
     public void handleButtonLogIn(ActionEvent event) {
         try {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Log in button pressed.");
+            //Load and switch to log in window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
             Parent root = (Parent) loader.load();
-
             LogInController controller = (loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Log in button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log In window.", ButtonType.OK);
             alert.showAndWait();
         }
-
     }
 
+    /**
+     * Sends the user data to the server so that it is inserted into the database.
+     *
+     * @param event ActionEvent that triggered the button.
+     */
     @FXML
     public void handleButtonAccept(ActionEvent event) {
         try{
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "Accept button pressed.");
+            //Save the info into a User
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
             user.setPassword(pwdPassword.getText());
+            //Get a signable to actually send the data
             user = SignableFactory.getSignable().signUp(user);
+            //Switch to the log out window
             switchToLogOutWindow();
         } catch(UserAlreadyExistsException | EmailAlreadyExistsException | UnexpectedErrorException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Sign up error: {0}", ex.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
     }
 
+    /**
+     * Helper function to change to the log out window.
+     */
     private void switchToLogOutWindow() {
         try{
+            //Load and switch to log out window
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
             Parent root =(Parent)loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
         } catch(IOException e){
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Error switching to log out: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             alert.showAndWait();
         } 
     }
 
     /**
-     * Tests if there is any error on every txtUsername text propertie change.
+     * Tests if there is any error on every txtUsername text property change.
      * @param obs
      */
     private void handleTextChangeUsername(Observable obs) {
@@ -211,7 +259,7 @@ public class SignUpController {
     }
 
     /**
-     * Tests if there is any error on every txtEmail text propertie change.
+     * Tests if there is any error on every txtEmail text property change.
      * @param obs
      */
     private void handleTextChangeEmail(Observable obs) {
@@ -241,12 +289,12 @@ public class SignUpController {
     }
 
     /**
-     * Tests if there is any error on every txtName text propertie change.
+     * Tests if there is any error on every txtName text property change.
      * @param obs
      */
     private void handleTextChangeName(Observable obs) {
         Integer txtNameLength = txtName.getText().trim().length();
-        Pattern patternName = Pattern.compile("^([A-Za-z]+[ ]?)+$");
+        Pattern patternName = Pattern.compile("^([A-Za-záéíóúÁÉÍÓÚ]+[ ]?)+$");
         Matcher matcherName = patternName.matcher(txtName.getText());
 
         //If there is any error...
@@ -270,7 +318,7 @@ public class SignUpController {
     }
 
     /**
-     * Tests if there is any error on every pwdPassword text propertie change.
+     * Tests if there is any error on every pwdPassword text property change.
      * @param obs
      */
     private void handleTextChangePassword(Observable obs) {
@@ -304,7 +352,7 @@ public class SignUpController {
     }
 
     /**
-     * Tests if there is any error on every pwdConfirmPassword text propertie change.
+     * Tests if there is any error on every pwdConfirmPassword text property change.
      * @param obs
      */
     private void handleTextChangeConfirmPassword(Observable obs) {
@@ -321,10 +369,18 @@ public class SignUpController {
         testInputErrors();
     }
 
+    /**
+     * Returns the stage.
+     * @return The stage
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Sets the stage.
+     * @param primaryStage Stage to set
+     */
     public void setStage(Stage primaryStage) {
         stage = primaryStage;
     }
