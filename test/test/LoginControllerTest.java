@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.Test;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.anything;
@@ -139,6 +140,7 @@ public class LoginControllerTest extends ApplicationTest {
         write("abcd*1234");
         clickOn("#btnAccept");
     }
+
     /**
      * Test if an alert pops up if user does not exist.
      */
@@ -168,5 +170,16 @@ public class LoginControllerTest extends ApplicationTest {
         sleep(2000);
         verifyThat("Password does not match.", isVisible());
         clickOn("Aceptar");
+    }
+  
+    @Test
+    public void testk_verifyAlertUnexpected() {
+        clickOn("#txtUsername");
+        write("mamaduk");
+        clickOn("#pwdPassword");
+        write("abcd*1234");
+        clickOn("#btnAccept");
+        verifyThat("#alert", anything());
+        verifyThat("An unexpected error occured, please try later.", isVisible());
     }
 }

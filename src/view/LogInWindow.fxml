@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="imagenFdondo" fx:id="fxPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogInController">
+<Pane id="imagenFdondo" fx:id="fxPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LogInController">
    <children>
       <ImageView fitHeight="429.0" fitWidth="697.0" layoutX="-6.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -75,6 +75,6 @@
             <DropShadow color="#ffcdcd" />
          </effect>
       </ImageView>
+      <Pane prefHeight="200.0" prefWidth="200.0" />
    </children>
 </Pane>
-

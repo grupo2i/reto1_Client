@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import logic.SignableFactory;
+import logic.Signer;
 import user.User;
 
 /**
@@ -57,6 +58,8 @@ public class LogInController {
     @FXML
     public void handleButtonSignUp(ActionEvent event) throws IOException {
         try {
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Sign Up button pressd.");
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignUpWindow.fxml"));
             Parent root = (Parent) loader.load();
             SignUpController controller = (loader.getController());
@@ -66,6 +69,7 @@ public class LogInController {
             controller.initStage(root);
             // If window switch not succesful, shows alert and notifies the user.
         } catch (IOException e) {
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Sign up button error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Sign Up window.", ButtonType.OK);
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "IOException: {0}", e.getMessage());
             alert.showAndWait();
@@ -86,6 +90,8 @@ public class LogInController {
     public void handleButtonAccept(ActionEvent event) throws UserNotFoundException, PasswordDoesNotMatchException, UnexpectedErrorException, IOException {
         try {
             // Creates new object user type and assigns username and password introduced by user.
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Accept button pressed");
+
             User user = new User();
             user.setLogin(txtUsername.getText());
             user.setPassword(pwdPassword.getText());
@@ -118,19 +124,25 @@ public class LogInController {
      */
     private void switchToLogOutWindow() throws IOException {
         try {
+            Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "LogOut button pressed.");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogOutWindow.fxml"));
             Parent root = (Parent) loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
             Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Loading log out stage...");
-            controller.initStage(root);
+            controller.initStage(root,txtUsername.getText().toString());
         } catch (IOException e) {
+            //traza al pulsar un botón
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Switch to log out error: {0}", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Could not change to Log Out window.", ButtonType.OK);
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());
             alert.showAndWait();
+            Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Could not change to Log Out window.");
         }
     }
-
+    /**
+     * set True in the errors
+    */
     boolean errorUsername = true;
     boolean errorPassword = true;
 
@@ -176,6 +188,7 @@ public class LogInController {
         btnAccept.setDefaultButton(true);
         Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Showing stage...");
         stage.show();
+        Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Switched to Log In window.");
     }
 
     /**
