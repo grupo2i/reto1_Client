@@ -13,7 +13,7 @@
             <Image url="@../images/fondo.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="btnLogOut" defaultButton="true" layoutX="410.0" layoutY="352.0" mnemonicParsing="false" onAction="#handleButtonLogOut" prefHeight="39.0" prefWidth="91.0" text="Log Out..." />
+      <Button fx:id="btnLogOut" defaultButton="true" layoutX="410.0" layoutY="352.0" mnemonicParsing="false" onAction="#handleButtonLogOut" prefHeight="39.0" prefWidth="91.0" text="Log Out" />
       <Button fx:id="btnExit" layoutX="511.0" layoutY="352.0" mnemonicParsing="false" onAction="#handleButtonExit" prefHeight="39.0" prefWidth="82.0" text="Exit" />
       <Label fx:id="lblGreeting" layoutX="85.0" layoutY="58.0" prefHeight="32.0" prefWidth="140.0" />
    </children>
