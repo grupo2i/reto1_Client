@@ -238,7 +238,7 @@ public class SignUpController {
             Parent root = (Parent) loader.load();
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
-            controller.initStage(root);
+            controller.initStage(root, txtUsername.getText().toString());
         } catch (IOException e) {
             //Showing error message on Alert window if anything goes wrong.
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, "Error switching to log out: {0}", e.getMessage());

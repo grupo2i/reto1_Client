@@ -130,7 +130,7 @@ public class LogInController {
             LogOutController controller = (loader.getController());
             controller.setStage(stage);
             Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Loading log out stage...");
-            controller.initStage(root,txtUsername.getText().toString());
+            controller.initStage(root, txtUsername.getText().toString());
         } catch (IOException e) {
             //traza al pulsar un botón
             Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, "Switch to log out error: {0}", e.getMessage());
@@ -174,7 +174,7 @@ public class LogInController {
         Logger.getLogger(LogInController.class.getName()).log(Level.INFO, "Initializing stage...");
         stage.setScene(scene);
         stage.setTitle("Log In");
-        stage.setResizable(false);
+        stage.setResizable(true);
         txtUsername.requestFocus();
         txtUsername.textProperty().addListener(this::textChangedUser);
         pwdPassword.textProperty().addListener(this::textChangedPassword);

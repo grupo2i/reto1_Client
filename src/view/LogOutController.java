@@ -53,7 +53,7 @@ public class LogOutController {
             } else {
                 this.btnExit.setText("Adiós");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LogInWindow.fxml"));
-                Parentroot = (Parent) loader.load();
+                Parent root = (Parent) loader.load();
                 LogInController controller = (loader.getController());
                 controller.setStage(stage);
                 controller.initStage(root);

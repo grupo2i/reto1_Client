@@ -31,7 +31,7 @@ public class LogOutControllerTest extends ApplicationTest {
         Parent root = (Parent) loader.load();
         LogOutController controller = (loader.getController());
         controller.setStage(stage);
-        controller.initStage(root);
+        controller.initStage(root, "username");
     }
 
     /**

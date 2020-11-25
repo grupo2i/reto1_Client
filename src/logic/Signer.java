@@ -105,7 +105,7 @@ public class Signer implements Signable{
         case EMAIL_ALREADY_EXISTS:
             throw new EmailAlreadyExistsException(user.getEmail());
         default:
-           throw new UnexpectedErrorException();
+           throw new UnexpectedErrorException("No response recieved from the server.");
         }
     }
 
@@ -130,7 +130,7 @@ public class Signer implements Signable{
         case PASSWORD_DOES_NOT_MATCH:
             throw new PasswordDoesNotMatchException();
         default:
-            throw new UnexpectedErrorException();
+            throw new UnexpectedErrorException("No response recieved from the server.");
         }
     }
 }
